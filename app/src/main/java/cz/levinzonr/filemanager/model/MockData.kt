@@ -6,7 +6,7 @@ class MockData {
 
         fun data() : List<File> {
             val list = ArrayList<File>()
-            for (i in 0..5) {
+            for (i in 0..8) {
                 list.add(File("/home/item$i", false))
             }
 

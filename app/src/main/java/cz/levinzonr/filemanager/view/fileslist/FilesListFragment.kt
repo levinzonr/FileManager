@@ -1,4 +1,4 @@
-package cz.levinzonr.filemanager.view
+package cz.levinzonr.filemanager.view.fileslist
 
 
 import android.os.Bundle

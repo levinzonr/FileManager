@@ -20,6 +20,7 @@ import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.presenter.FilesListPresenter
 import cz.levinzonr.filemanager.view.ViewCallbacks
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_files_list.*
 import kotlinx.android.synthetic.main.fragment_files_list.view.*
 
@@ -108,6 +109,27 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
     override fun onItemClick(file: File) {
         if (file.isDirectory) listener.onDirectorySelected(file)
         else listener.onFileSelected(file)
+    }
+
+    override fun onItemLongClick(position: Int) {
+        (activity as AppCompatActivity).toolbar.startActionMode(object : ActionMode.Callback {
+            override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
+                return true
+            }
+
+            override fun onCreateActionMode(p0: ActionMode?, menu: Menu?): Boolean {
+                activity.menuInflater.inflate(R.menu.menu_fileslist_context, menu)
+                return true
+            }
+
+            override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                return true
+            }
+
+            override fun onDestroyActionMode(p0: ActionMode?) {
+            }
+        })
+
     }
 
     override fun onLoadingStart() {

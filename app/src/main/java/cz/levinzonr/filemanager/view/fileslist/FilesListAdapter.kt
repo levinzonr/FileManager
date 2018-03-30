@@ -20,13 +20,18 @@ class FilesListAdapter(val context:Context, val listener: OnItemClickListener) :
     }
     interface OnItemClickListener {
         fun onItemClick(file: File)
+        fun onItemLongClick(position: Int)
     }
 
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bindView(file: File) {
+        fun bindView(file: File, position: Int) {
             view.setOnClickListener({
                 listener.onItemClick(file)
+            })
+            view.setOnLongClickListener({
+                listener.onItemLongClick(position)
+                true
             })
             view.file_name.text = file.name
             if (!file.isDirectory) {
@@ -47,6 +52,6 @@ class FilesListAdapter(val context:Context, val listener: OnItemClickListener) :
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.bindView(items[position])
+        holder?.bindView(items[position], position)
     }
 }

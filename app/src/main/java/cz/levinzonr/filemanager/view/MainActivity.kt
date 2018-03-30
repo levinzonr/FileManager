@@ -12,19 +12,26 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        loadFragment("")
+        loadFragment("", false)
     }
 
-    private fun loadFragment(path: String) {
-        supportFragmentManager.
+    private fun loadFragment(path: String, withBackStack: Boolean= true) {
+        val tr = supportFragmentManager.
                 beginTransaction()
                 .replace(R.id.container, FilesListFragment.newInstance(path))
-                .addToBackStack(null)
-                .commit()
+        if (withBackStack)
+            tr.addToBackStack(null)
+
+        tr.commit()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

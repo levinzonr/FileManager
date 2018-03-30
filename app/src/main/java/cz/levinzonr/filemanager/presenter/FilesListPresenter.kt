@@ -19,6 +19,7 @@ class FilesListPresenter : Presenter<FilesListFragment> {
     private var view: FilesListFragment? = null
     private val dataManager = DataManager()
     private var disposable: Disposable? = null
+    private lateinit var list: ArrayList<File>
 
     override fun onAttach(view: FilesListFragment) {
         this.view = view
@@ -31,7 +32,7 @@ class FilesListPresenter : Presenter<FilesListFragment> {
 
     fun getFilesInFolder(path: String) {
         view?.onLoadingStart()
-
+         disposable?.dispose()
          disposable = Observable.just(path)
                  .map { t -> dataManager.files(t)  }
                 .subscribeOn(Schedulers.io())
@@ -39,11 +40,12 @@ class FilesListPresenter : Presenter<FilesListFragment> {
                 .subscribeWith(object : DisposableObserver<ArrayList<File>>(){
                     override fun onComplete() {
                         Log.d(TAG, "onComplete")
+                        view?.onLoadingFinished(list)
                     }
 
                     override fun onNext(t: ArrayList<File>) {
                         Log.d(TAG, "onNExt")
-                        view?.onLoadingFinished(t)
+                        list = t
                     }
 
                     override fun onError(e: Throwable) {
@@ -55,6 +57,7 @@ class FilesListPresenter : Presenter<FilesListFragment> {
 
     override fun onDetach() {
         view = null
+        Log.d(TAG, "Dispose")
         disposable?.dispose()
     }
 

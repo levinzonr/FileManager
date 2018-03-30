@@ -3,7 +3,9 @@ package cz.levinzonr.filemanager.view.fileslist
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Environment
 import android.support.v4.app.Fragment
+import android.support.v4.os.EnvironmentCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.GridLayoutManager
@@ -37,6 +39,7 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
         const val TAG = "FilesListFragment"
 
         fun newInstance(path: String) : FilesListFragment {
+            Log.d(TAG, "New Instacne")
             val fragment = FilesListFragment()
             val bundle = Bundle()
             bundle.putString(ARG_PATH, path)
@@ -52,9 +55,6 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View?{
-
-        presenter = FilesListPresenter()
-        presenter.onAttach(this)
         val path = arguments.getString(ARG_PATH)
         (context as AppCompatActivity).supportActionBar?.title = path.split("/").last()
         (context as AppCompatActivity).supportActionBar?.subtitle = path
@@ -64,10 +64,13 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val path = arguments.getString(ARG_PATH)
+
+        Log.d(TAG, "onViewCreated: $path")
         adapter = FilesListAdapter(context, this)
         recycler_view.adapter = adapter
-
-        val path = arguments.getString(ARG_PATH)
+        presenter = FilesListPresenter()
+        presenter.onAttach(this)
         presenter.getFilesInFolder(path)
 
         val columnsCnt = context.resources.getInteger(R.integer.grid_column_cnt)
@@ -75,7 +78,6 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
         if (columnsCnt == 1) {
             recycler_view.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
-        Log.d(TAG, "onViewCreated")
     }
 
     override fun onItemClick(file: File) {
@@ -106,10 +108,11 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
     }
 
     override fun onDestroy() {
+        val path = arguments.getString(ARG_PATH)
+        Log.d(TAG, "onDestroy: $path")
         super.onDestroy()
         presenter.onDetach()
     }
-
 
 
 }

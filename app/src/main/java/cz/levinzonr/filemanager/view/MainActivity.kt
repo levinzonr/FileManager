@@ -7,6 +7,7 @@ import android.os.Environment
 import android.support.design.widget.Snackbar
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import cz.levinzonr.filemanager.R
@@ -18,18 +19,19 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), FilesListFragment.OnFilesFragmentInteraction {
 
     companion object {
-
+        const val TAG = "MainActivity"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        if (supportFragmentManager.backStackEntryCount == 0)
+        if (savedInstanceState == null)
             loadFragment(Environment.getRootDirectory().absolutePath, false)
     }
 
     private fun loadFragment(path: String, withBackStack: Boolean= true) {
+        Log.d(TAG, "Mountig fragment: $path, add: $withBackStack")
         val tr = supportFragmentManager.
                 beginTransaction()
                 .replace(R.id.container, FilesListFragment.newInstance(path))

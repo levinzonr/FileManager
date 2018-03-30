@@ -1,5 +1,7 @@
 package cz.levinzonr.filemanager.view
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.FragmentTransaction
@@ -51,6 +53,10 @@ class MainActivity : AppCompatActivity(), FilesListFragment.OnFilesFragmentInter
     }
 
     override fun onFileSelected(file: File) {
+        val intent = Intent()
+        intent.action = Intent.ACTION_VIEW
+        intent.data = Uri.fromFile(java.io.File(file.path))
+        startActivity(Intent.createChooser(intent, "G"))
 
     }
 

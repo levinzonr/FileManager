@@ -3,7 +3,6 @@ package cz.levinzonr.filemanager.view.fileslist
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Environment
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
@@ -15,19 +14,14 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 
 import cz.levinzonr.filemanager.R
-import cz.levinzonr.filemanager.model.DataManager
 import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.presenter.FilesListPresenter
-import cz.levinzonr.filemanager.presenter.Presenter
-import cz.levinzonr.filemanager.view.MainActivity
 import cz.levinzonr.filemanager.view.ViewCallbacks
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_files_list.*
 
-class FilesListFragment : Fragment(), FilesLinearAdapter.OnItemClickListener, ViewCallbacks {
+class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, ViewCallbacks {
 
-    private lateinit var adapter: FilesLinearAdapter
-    private lateinit var frameLayout: FrameLayout
+    private lateinit var adapter: FilesListAdapter
     private lateinit var listener: OnFilesFragmentInteraction
 
     private lateinit var presenter: FilesListPresenter
@@ -70,7 +64,7 @@ class FilesListFragment : Fragment(), FilesLinearAdapter.OnItemClickListener, Vi
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = FilesLinearAdapter(context, this)
+        adapter = FilesListAdapter(context, this)
         recycler_view.adapter = adapter
 
         val path = arguments.getString(ARG_PATH)

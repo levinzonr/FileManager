@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,7 @@ import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.File
 import kotlinx.android.synthetic.main.item_file.view.*
 
-class FilesLinearAdapter(val context:Context, val listener: OnItemClickListener) : RecyclerView.Adapter<FilesLinearAdapter.ViewHolder>() {
+class FilesListAdapter(val context:Context, val listener: OnItemClickListener) : RecyclerView.Adapter<FilesListAdapter.ViewHolder>() {
     var items = ArrayList<File>()
     set(value) {
         field = value
@@ -31,6 +32,9 @@ class FilesLinearAdapter(val context:Context, val listener: OnItemClickListener)
             if (!file.isDirectory) {
                 view.file_icon.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.ic_description_black_48dp))
                 view.file_icon.setColorFilter(Color.LTGRAY)
+            } else {
+                view.file_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_folder_black_48dp))
+                view.file_icon.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary))
             }
         }
     }

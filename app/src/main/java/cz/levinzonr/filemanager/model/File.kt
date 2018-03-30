@@ -7,4 +7,9 @@ class File(val path: String, val name: String, val isDirectory: Boolean){
             return File(file.absolutePath, file.name, file.isDirectory)
         }
     }
+
+    override fun toString(): String {
+        return "File(path='$path', name='$name', isDirectory=$isDirectory)"
+    }
+
 }

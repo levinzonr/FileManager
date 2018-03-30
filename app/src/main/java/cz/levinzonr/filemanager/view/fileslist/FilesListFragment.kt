@@ -4,6 +4,7 @@ package cz.levinzonr.filemanager.view.fileslist
 import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -54,7 +55,12 @@ class FilesListFragment : Fragment() {
         adapter = FilesLinearAdapter(context)
         adapter.items = ArrayList( MockData.data() )
         recycler_view.adapter = adapter
-        recycler_view.layoutManager = GridLayoutManager(context, context.resources.getInteger(R.integer.grid_column_cnt))
+        val columnsCnt = context.resources.getInteger(R.integer.grid_column_cnt)
+        recycler_view.layoutManager = GridLayoutManager(context, columnsCnt)
+        if (columnsCnt == 1) {
+            recycler_view.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        }
+
         Log.d(TAG, "onViewCreated")
     }
 

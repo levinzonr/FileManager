@@ -3,6 +3,7 @@ package cz.levinzonr.filemanager.view
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.support.design.widget.Snackbar
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity(), FilesListFragment.OnFilesFragmentInter
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         if (supportFragmentManager.backStackEntryCount == 0)
-            loadFragment("", false)
+            loadFragment(Environment.getRootDirectory().absolutePath, false)
     }
 
     private fun loadFragment(path: String, withBackStack: Boolean= true) {

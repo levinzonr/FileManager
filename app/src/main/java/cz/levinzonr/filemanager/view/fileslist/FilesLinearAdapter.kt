@@ -13,6 +13,10 @@ import kotlinx.android.synthetic.main.item_file.view.*
 
 class FilesLinearAdapter(val context:Context, val listener: OnItemClickListener) : RecyclerView.Adapter<FilesLinearAdapter.ViewHolder>() {
     var items = ArrayList<File>()
+    set(value) {
+        field = value
+        notifyDataSetChanged()
+    }
     interface OnItemClickListener {
         fun onItemClick(file: File)
     }

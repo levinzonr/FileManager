@@ -17,7 +17,7 @@ class FilesLinearAdapter(val context:Context) : RecyclerView.Adapter<FilesLinear
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
         fun bindView(file: File) {
-            view.file_name.text = file.path
+            view.file_name.text = file.name
             if (!file.isDirectory) {
                 view.file_icon.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.ic_description_black_48dp))
                 view.file_icon.setColorFilter(Color.LTGRAY)

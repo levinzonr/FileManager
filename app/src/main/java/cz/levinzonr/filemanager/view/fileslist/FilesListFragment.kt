@@ -16,6 +16,7 @@ import android.widget.FrameLayout
 import android.widget.Toast
 
 import cz.levinzonr.filemanager.R
+import cz.levinzonr.filemanager.model.DataManager
 import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.model.MockData
 import kotlinx.android.synthetic.main.content_main.*
@@ -53,14 +54,13 @@ class FilesListFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter = FilesLinearAdapter(context)
-        adapter.items = ArrayList( MockData.data() )
+        adapter.items = ArrayList( DataManager().files() )
         recycler_view.adapter = adapter
         val columnsCnt = context.resources.getInteger(R.integer.grid_column_cnt)
         recycler_view.layoutManager = GridLayoutManager(context, columnsCnt)
         if (columnsCnt == 1) {
             recycler_view.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
-
         Log.d(TAG, "onViewCreated")
     }
 

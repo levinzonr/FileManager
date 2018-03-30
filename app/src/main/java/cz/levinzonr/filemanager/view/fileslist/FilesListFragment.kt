@@ -93,6 +93,7 @@ class FilesListFragment : Fragment(), FilesLinearAdapter.OnItemClickListener, Vi
         Log.d(TAG, "onLoadingStart")
         progress_bar.visibility = View.VISIBLE
         recycler_view.visibility = View.GONE
+        error_layout.visibility = View.GONE
     }
 
     override fun onLoadingFinished(items: ArrayList<File>) {
@@ -100,12 +101,14 @@ class FilesListFragment : Fragment(), FilesLinearAdapter.OnItemClickListener, Vi
         progress_bar.visibility = View.GONE
         recycler_view.visibility = View.VISIBLE
         adapter.items = items
+        error_layout.visibility = View.GONE
     }
 
     override fun onError(e: String) {
         Log.d(TAG, "onError: $e")
         progress_bar.visibility = View.GONE
         recycler_view.visibility = View.GONE
+        error_layout.visibility = View.VISIBLE
     }
 
     override fun onDestroy() {

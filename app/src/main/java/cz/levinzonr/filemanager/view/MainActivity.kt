@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), FilesListFragment.OnFilesFragmentInter
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         if (supportFragmentManager.backStackEntryCount == 0)
-            loadFragment(Environment.getExternalStorageDirectory().absolutePath, false)
+            loadFragment(Environment.getRootDirectory().absolutePath, false)
     }
 
     private fun loadFragment(path: String, withBackStack: Boolean= true) {

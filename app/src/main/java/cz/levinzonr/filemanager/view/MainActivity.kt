@@ -22,7 +22,8 @@ class MainActivity : AppCompatActivity(), FilesListFragment.OnFilesFragmentInter
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        loadFragment("", false)
+        if (supportFragmentManager.backStackEntryCount == 0)
+            loadFragment("", false)
     }
 
     private fun loadFragment(path: String, withBackStack: Boolean= true) {

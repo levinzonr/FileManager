@@ -4,10 +4,12 @@ import android.util.Log
 import cz.levinzonr.filemanager.model.DataManager
 import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.view.fileslist.FilesListFragment
+import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import org.reactivestreams.Subscriber
 import org.reactivestreams.Subscription
@@ -29,18 +31,14 @@ class FilesListPresenter : Presenter<FilesListFragment> {
 
     fun getFilesInFolder(path: String) {
         view?.onLoadingStart()
-         dataManager.files(path)
+
+         disposable = Observable.just(path)
+                 .map { t -> dataManager.files(t)  }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : Observer<ArrayList<File>>{
+                .subscribeWith(object : DisposableObserver<ArrayList<File>>(){
                     override fun onComplete() {
                         Log.d(TAG, "onComplete")
-                    }
-
-                    override fun onSubscribe(d: Disposable) {
-                        disposable = d
-                        Log.d(TAG, "onSubscribe")
-
                     }
 
                     override fun onNext(t: ArrayList<File>) {

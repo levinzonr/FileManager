@@ -46,6 +46,8 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
 
         const val ARG_PATH = "FilePath"
         const val TAG = "FilesListFragment"
+        const val SAVED_ACTIONMODE = "ActionMode"
+        const val SAVED_SELECTED = "SelectedItems"
 
         fun newInstance(path: String) : FilesListFragment {
             Log.d(TAG, "New Instacne")
@@ -87,6 +89,15 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
             recycler_view.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
 
+        if (savedInstanceState != null) {
+            val actionModeActive = savedInstanceState.getBoolean(SAVED_ACTIONMODE)
+            if( actionModeActive) {
+                startActionMode()
+                adapter.checked = savedInstanceState.getIntegerArrayList(SAVED_SELECTED)
+                actionMode.title = context.getString(R.string.checked_files, adapter.checked.size)
+            }
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -96,6 +107,12 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
         progressView = LayoutInflater.from(context).inflate(R.layout.content_progress_bar, null)
         progressView.progress_bar.indeterminateDrawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN)
 
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putBoolean(SAVED_ACTIONMODE, adapter.actionMode)
+        outState?.putIntegerArrayList(SAVED_SELECTED, adapter.checked)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -115,13 +132,18 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
 
     override fun onItemChecked(position: Int) {
         adapter.toggleSelection(position)
-        actionMode.title = adapter.checked.size.toString()
+        actionMode.title = context.getString(R.string.checked_files, adapter.checked.size)
         if (adapter.checked.size == 0) {
             actionMode.finish()
         }
     }
 
     override fun onItemLongClick(position: Int) {
+        startActionMode()
+        onItemChecked(position)
+    }
+
+    private fun startActionMode() {
         (activity as AppCompatActivity).toolbar.startActionMode(object : ActionMode.Callback {
             override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
                 return true
@@ -144,7 +166,7 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
                 adapter.onActionModeDestroyed()
             }
         })
-        onItemChecked(position)
+        adapter.actionMode = true
     }
 
     override fun onLoadingStart() {

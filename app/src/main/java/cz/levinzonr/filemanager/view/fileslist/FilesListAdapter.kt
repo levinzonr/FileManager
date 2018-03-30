@@ -19,7 +19,15 @@ class FilesListAdapter(val context:Context, val listener: OnItemClickListener) :
         notifyDataSetChanged()
     }
     var actionMode: Boolean = false
+    set(value) {
+        field = value
+        notifyDataSetChanged()
+    }
     var checked = ArrayList<Int>()
+    set(value){
+        field = value
+        notifyDataSetChanged()
+    }
 
     interface OnItemClickListener {
 
@@ -38,7 +46,6 @@ class FilesListAdapter(val context:Context, val listener: OnItemClickListener) :
             })
             view.setOnLongClickListener({
                 if (!actionMode) {
-                    actionMode = true
                     listener.onItemLongClick(position)
                 }
                 true

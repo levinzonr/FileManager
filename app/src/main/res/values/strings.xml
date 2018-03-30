@@ -7,4 +7,5 @@
     <string name="error_msg">Something went wrong</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_delete">Delete</string>
+    <string name="checked_files">To delete: %1d</string>
 </resources>

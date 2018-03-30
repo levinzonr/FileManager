@@ -5,14 +5,11 @@ import cz.levinzonr.filemanager.model.DataManager
 import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.view.fileslist.FilesListFragment
 import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
-import org.reactivestreams.Subscriber
-import org.reactivestreams.Subscription
+import java.util.concurrent.TimeUnit
 
 class FilesListPresenter : Presenter<FilesListFragment> {
 

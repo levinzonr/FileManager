@@ -15,6 +15,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
+import android.widget.Toast
 
 import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.File
@@ -146,7 +147,15 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
     private fun startActionMode() {
         (activity as AppCompatActivity).toolbar.startActionMode(object : ActionMode.Callback {
             override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
-                return true
+                return when(p1?.itemId) {
+                    R.id.action_delete -> {
+                        val list: List<File> = adapter.checked.map { adapter.items[it]  }
+                        presenter.removeFiles(ArrayList(list))
+                        actionMode.finish()
+                        return true
+                    }
+                    else -> false
+                }
             }
 
             override fun onCreateActionMode(p0: ActionMode?, menu: Menu?): Boolean {
@@ -202,5 +211,12 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
         presenter.onDetach()
     }
 
+    override fun onFilesDeleted() {
+        Toast.makeText(context, "files deleted", Toast.LENGTH_SHORT).show()
+    }
 
+    override fun onFileDeleted(num: Int, max: Int, file: File) {
+        Toast.makeText(context, "${num+1}/$max files deleted", Toast.LENGTH_SHORT).show()
+        adapter.remove(file)
+    }
 }

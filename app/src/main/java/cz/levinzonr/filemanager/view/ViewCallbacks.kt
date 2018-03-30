@@ -9,4 +9,9 @@ interface ViewCallbacks {
     fun onLoadingFinished(items: ArrayList<File>)
 
     fun onError(e: String)
+
+    fun onFileDeleted(num: Int, max: Int, file: File)
+
+
+    fun onFilesDeleted()
 }

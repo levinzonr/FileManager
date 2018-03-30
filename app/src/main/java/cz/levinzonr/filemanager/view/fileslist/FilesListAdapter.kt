@@ -93,5 +93,10 @@ class FilesListAdapter(val context:Context, val listener: OnItemClickListener) :
         notifyDataSetChanged()
     }
 
+    fun remove(file: File) {
+        items.remove(file)
+        notifyDataSetChanged()
+    }
+
 
 }

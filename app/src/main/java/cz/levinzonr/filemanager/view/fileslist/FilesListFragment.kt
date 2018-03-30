@@ -51,22 +51,12 @@ class FilesListFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = FilesLinearAdapter()
+        adapter = FilesLinearAdapter(context)
         adapter.items = ArrayList( MockData.data() )
         recycler_view.adapter = adapter
-        recycler_view.layoutManager = LinearLayoutManager(context)
+        recycler_view.layoutManager = GridLayoutManager(context, context.resources.getInteger(R.integer.grid_column_cnt))
         Log.d(TAG, "onViewCreated")
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
-        Log.d(TAG, "OnConfigChange")
-        super.onConfigurationChanged(newConfig)
-        recycler_view.recycledViewPool.clear()
-        if (newConfig?.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            recycler_view.layoutManager = LinearLayoutManager(context)
-        } else {
-            recycler_view.layoutManager = GridLayoutManager(context, 4)
-        }
-    }
 
 }

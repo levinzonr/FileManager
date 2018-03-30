@@ -1,12 +1,16 @@
 package cz.levinzonr.filemanager.view.fileslist
 
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 
 import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.File
@@ -25,6 +29,7 @@ class FilesListFragment : Fragment() {
     companion object {
 
         const val ARG_PATH = "FilePath"
+        const val TAG = "FilesListFragment"
 
         fun newInstance(path: String) : FilesListFragment {
             val fragment = FilesListFragment()
@@ -46,6 +51,17 @@ class FilesListFragment : Fragment() {
         adapter.items = ArrayList( MockData.data() )
         recycler_view.adapter = adapter
         recycler_view.layoutManager = LinearLayoutManager(context)
+        Log.d(TAG, "onViewCreated")
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        Log.d(TAG, "OnConfigChange")
+        super.onConfigurationChanged(newConfig)
+        if (newConfig?.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recycler_view.layoutManager = LinearLayoutManager(context)
+        } else {
+            recycler_view.layoutManager = GridLayoutManager(context, 4)
+        }
     }
 
 }

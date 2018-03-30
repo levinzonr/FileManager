@@ -18,19 +18,29 @@ class FilesListAdapter(val context:Context, val listener: OnItemClickListener) :
         field = value
         notifyDataSetChanged()
     }
+    var actionMode: Boolean = false
+    var checked = ArrayList<Int>()
+
     interface OnItemClickListener {
+
         fun onItemClick(file: File)
+        fun onItemChecked(position: Int)
         fun onItemLongClick(position: Int)
     }
+
 
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
         fun bindView(file: File, position: Int) {
             view.setOnClickListener({
-                listener.onItemClick(file)
+                if(actionMode) listener.onItemChecked(position)
+                else listener.onItemClick(file)
             })
             view.setOnLongClickListener({
-                listener.onItemLongClick(position)
+                if (!actionMode) {
+                    actionMode = true
+                    listener.onItemLongClick(position)
+                }
                 true
             })
             view.file_name.text = file.name
@@ -41,6 +51,12 @@ class FilesListAdapter(val context:Context, val listener: OnItemClickListener) :
                 view.file_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_folder_black_48dp))
                 view.file_icon.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary))
             }
+
+            if (actionMode && checked.contains(position)) {
+                view.file_icon.setImageResource(R.drawable.ic_check_circle_black_48dp)
+                view.file_icon.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
+            }
+
         }
     }
 
@@ -54,4 +70,21 @@ class FilesListAdapter(val context:Context, val listener: OnItemClickListener) :
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         holder?.bindView(items[position], position)
     }
+
+    fun toggleSelection(position: Int) {
+        if (checked.contains(position))
+            checked.remove(position)
+        else
+            checked.add(position)
+
+        notifyDataSetChanged()
+    }
+
+    fun onActionModeDestroyed() {
+        checked.clear()
+        actionMode = false
+        notifyDataSetChanged()
+    }
+
+
 }

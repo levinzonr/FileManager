@@ -35,6 +35,8 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
     private var updateButton: MenuItem? = null
     private lateinit var progressView: View
 
+    private lateinit var actionMode: ActionMode
+
     interface OnFilesFragmentInteraction {
         fun onFileSelected(file: File)
         fun onDirectorySelected(file: File)
@@ -111,6 +113,14 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
         else listener.onFileSelected(file)
     }
 
+    override fun onItemChecked(position: Int) {
+        adapter.toggleSelection(position)
+        actionMode.title = adapter.checked.size.toString()
+        if (adapter.checked.size == 0) {
+            actionMode.finish()
+        }
+    }
+
     override fun onItemLongClick(position: Int) {
         (activity as AppCompatActivity).toolbar.startActionMode(object : ActionMode.Callback {
             override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
@@ -119,17 +129,22 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
 
             override fun onCreateActionMode(p0: ActionMode?, menu: Menu?): Boolean {
                 activity.menuInflater.inflate(R.menu.menu_fileslist_context, menu)
-                return true
+                if (p0 != null) {
+                    actionMode = p0
+                    return true
+                }
+                return false
             }
 
             override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean {
-                return true
+                return false
             }
 
             override fun onDestroyActionMode(p0: ActionMode?) {
+                adapter.onActionModeDestroyed()
             }
         })
-
+        onItemChecked(position)
     }
 
     override fun onLoadingStart() {

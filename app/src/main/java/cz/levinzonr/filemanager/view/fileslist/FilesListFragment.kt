@@ -4,6 +4,7 @@ package cz.levinzonr.filemanager.view.fileslist
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.GridLayoutManager
 import android.util.Log
@@ -15,6 +16,8 @@ import android.widget.FrameLayout
 import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.DataManager
 import cz.levinzonr.filemanager.model.File
+import cz.levinzonr.filemanager.view.MainActivity
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_files_list.*
 
 class FilesListFragment : Fragment(), FilesLinearAdapter.OnItemClickListener {
@@ -48,7 +51,11 @@ class FilesListFragment : Fragment(), FilesLinearAdapter.OnItemClickListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View?{
+        val path = arguments.getString(ARG_PATH)
+        (context as AppCompatActivity).supportActionBar?.title = path.split("/").last()
+        (context as AppCompatActivity).supportActionBar?.subtitle = path
+
         return inflater.inflate(R.layout.fragment_files_list, container, false)
     }
 

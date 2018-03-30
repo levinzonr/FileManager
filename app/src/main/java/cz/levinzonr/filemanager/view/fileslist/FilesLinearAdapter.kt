@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.File
-import kotlinx.android.synthetic.main.iitem_file_linear.view.*
+import kotlinx.android.synthetic.main.item_file.view.*
 
 class FilesLinearAdapter : RecyclerView.Adapter<FilesLinearAdapter.ViewHolder>() {
     var items = ArrayList<File>()
@@ -20,7 +20,7 @@ class FilesLinearAdapter : RecyclerView.Adapter<FilesLinearAdapter.ViewHolder>()
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent?.context)
-        return ViewHolder(inflater.inflate(R.layout.iitem_file_linear, parent, false))
+        return ViewHolder(inflater.inflate(R.layout.item_file, parent, false))
     }
 
     override fun getItemCount(): Int = items.size

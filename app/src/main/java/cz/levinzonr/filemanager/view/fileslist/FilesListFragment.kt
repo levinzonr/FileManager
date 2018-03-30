@@ -6,20 +6,24 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.Toast
 
 import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.model.MockData
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_files_list.*
 
 class FilesListFragment : Fragment() {
 
     private lateinit var adapter: FilesLinearAdapter
+    private lateinit var frameLayout: FrameLayout
 
     interface OnFilesFragmentInteraction {
         fun onFileSelected(file: File)
@@ -57,6 +61,7 @@ class FilesListFragment : Fragment() {
     override fun onConfigurationChanged(newConfig: Configuration?) {
         Log.d(TAG, "OnConfigChange")
         super.onConfigurationChanged(newConfig)
+        recycler_view.recycledViewPool.clear()
         if (newConfig?.orientation == Configuration.ORIENTATION_PORTRAIT) {
             recycler_view.layoutManager = LinearLayoutManager(context)
         } else {

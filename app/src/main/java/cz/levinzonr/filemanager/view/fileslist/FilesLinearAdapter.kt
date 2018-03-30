@@ -11,12 +11,18 @@ import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.File
 import kotlinx.android.synthetic.main.item_file.view.*
 
-class FilesLinearAdapter(val context:Context) : RecyclerView.Adapter<FilesLinearAdapter.ViewHolder>() {
+class FilesLinearAdapter(val context:Context, val listener: OnItemClickListener) : RecyclerView.Adapter<FilesLinearAdapter.ViewHolder>() {
     var items = ArrayList<File>()
+    interface OnItemClickListener {
+        fun onItemClick(file: File)
+    }
 
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
         fun bindView(file: File) {
+            view.setOnClickListener({
+                listener.onItemClick(file)
+            })
             view.file_name.text = file.name
             if (!file.isDirectory) {
                 view.file_icon.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.ic_description_black_48dp))

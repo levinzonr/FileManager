@@ -1,31 +1,27 @@
 package cz.levinzonr.filemanager.view.fileslist
 
 
-import android.content.res.Configuration
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.Toast
 
 import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.DataManager
 import cz.levinzonr.filemanager.model.File
-import cz.levinzonr.filemanager.model.MockData
-import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_files_list.*
 
-class FilesListFragment : Fragment() {
+class FilesListFragment : Fragment(), FilesLinearAdapter.OnItemClickListener {
 
     private lateinit var adapter: FilesLinearAdapter
     private lateinit var frameLayout: FrameLayout
+    private lateinit var listener: OnFilesFragmentInteraction
 
     interface OnFilesFragmentInteraction {
         fun onFileSelected(file: File)
@@ -46,6 +42,11 @@ class FilesListFragment : Fragment() {
         }
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        listener = context as OnFilesFragmentInteraction
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_files_list, container, false)
@@ -53,8 +54,10 @@ class FilesListFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = FilesLinearAdapter(context)
-        adapter.items = ArrayList( DataManager().files() )
+        adapter = FilesLinearAdapter(context, this)
+        val path = arguments.getString(ARG_PATH)
+        if (path == "") adapter.items = ArrayList(DataManager().files())
+        else adapter.items = ArrayList( DataManager().files(path) )
         recycler_view.adapter = adapter
         val columnsCnt = context.resources.getInteger(R.integer.grid_column_cnt)
         recycler_view.layoutManager = GridLayoutManager(context, columnsCnt)
@@ -64,5 +67,8 @@ class FilesListFragment : Fragment() {
         Log.d(TAG, "onViewCreated")
     }
 
-
+    override fun onItemClick(file: File) {
+        if (file.isDirectory) listener.onDirectorySelected(file)
+        else listener.onFileSelected(file)
+    }
 }

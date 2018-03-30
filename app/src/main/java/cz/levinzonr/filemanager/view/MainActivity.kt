@@ -2,15 +2,17 @@ package cz.levinzonr.filemanager.view
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import cz.levinzonr.filemanager.R
+import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.view.fileslist.FilesListFragment
 
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), FilesListFragment.OnFilesFragmentInteraction {
 
     companion object {
 
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         if (withBackStack)
             tr.addToBackStack(null)
 
+        tr.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         tr.commit()
 
     }
@@ -44,5 +47,13 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onFileSelected(file: File) {
+
+    }
+
+    override fun onDirectorySelected(file: File) {
+        loadFragment(file.path)
     }
 }

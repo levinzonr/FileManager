@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:summary="@string/pref_default_dir_sum"
+        android:title="@string/pref_default_dir"
+        android:key="pref_default_dir"
+        />
+
+</PreferenceScreen>

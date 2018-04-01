@@ -6,64 +6,39 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.File
+import cz.levinzonr.filemanager.presenter.FilesListPresenter
+import cz.levinzonr.filemanager.presenter.Presenter
+import cz.levinzonr.filemanager.view.folderchooser.FileExplorerView
 import kotlinx.android.synthetic.main.item_file.view.*
 
-class FilesListAdapter(val context:Context, val listener: OnItemClickListener) : RecyclerView.Adapter<FilesListAdapter.ViewHolder>() {
-    var items = ArrayList<File>()
-    set(value) {
-        field = value
-        notifyDataSetChanged()
-    }
-    var actionMode: Boolean = false
-    set(value) {
-        field = value
-        notifyDataSetChanged()
-    }
-    var checked = ArrayList<Int>()
-    set(value){
-        field = value
-        notifyDataSetChanged()
-    }
-
-    interface OnItemClickListener {
-
-        fun onItemClick(file: File)
-        fun onItemChecked(position: Int)
-        fun onItemLongClick(position: Int)
-    }
+class FilesListAdapter(val context:Context, val presenter: FilesListPresenter) :
+        RecyclerView.Adapter<FilesListAdapter.ViewHolder>() {
 
 
-    inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) , RecyclerItemView {
 
-        fun bindView(file: File, position: Int) {
-            view.setOnClickListener({
-                if(actionMode) listener.onItemChecked(position)
-                else listener.onItemClick(file)
-            })
-            view.setOnLongClickListener({
-                if (!actionMode) {
-                    listener.onItemLongClick(position)
-                }
-                true
-            })
-            view.file_name.text = file.name
-            if (!file.isDirectory) {
-                view.file_icon.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.ic_description_black_48dp))
-                view.file_icon.setColorFilter(Color.LTGRAY)
-            } else {
-                view.file_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_folder_black_48dp))
-                view.file_icon.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary))
-            }
+        override fun setFileView(name: String) {
+            view.file_name.text = name
+            view.file_icon.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.ic_description_black_48dp))
+            view.file_icon.setColorFilter(Color.LTGRAY)
+        }
 
-            if (actionMode && checked.contains(position)) {
-                view.file_icon.setImageResource(R.drawable.ic_check_circle_black_48dp)
-                view.file_icon.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
-            }
+        override fun setFolderView(name: String) {
+            view.file_name.text = name
+            view.file_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_folder_black_48dp))
+            view.file_icon.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary))    }
 
+        override fun setCheckedView(name: String) {
+            view.file_name.text = name
+            view.file_icon.setImageResource(R.drawable.ic_check_circle_black_48dp)
+            view.file_icon.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
         }
     }
 
@@ -72,31 +47,15 @@ class FilesListAdapter(val context:Context, val listener: OnItemClickListener) :
         return ViewHolder(inflater.inflate(R.layout.item_file, parent, false))
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = presenter.itemsCount()
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.bindView(items[position], position)
+        holder?.view?.setOnClickListener{ presenter.onFileSelected(position) }
+        holder?.view?.setOnLongClickListener{presenter.onLongClick(position); true}
+        presenter.bindItemAtPosition(position, holder!!)
     }
 
-    fun toggleSelection(position: Int) {
-        if (checked.contains(position))
-            checked.remove(position)
-        else
-            checked.add(position)
 
-        notifyDataSetChanged()
-    }
-
-    fun onActionModeDestroyed() {
-        checked.clear()
-        actionMode = false
-        notifyDataSetChanged()
-    }
-
-    fun remove(file: File) {
-        items.remove(file)
-        notifyDataSetChanged()
-    }
 
 
 }

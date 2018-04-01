@@ -3,39 +3,34 @@ package cz.levinzonr.filemanager.view.fileslist
 
 import android.content.Context
 import android.graphics.Color
-import android.graphics.ColorFilter
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.os.Environment
 import android.support.v4.app.Fragment
-import android.support.v4.os.EnvironmentCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.*
-import android.widget.FrameLayout
 import android.widget.Toast
 
 import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.presenter.FilesListPresenter
-import cz.levinzonr.filemanager.view.ViewCallbacks
+import cz.levinzonr.filemanager.view.folderchooser.FileExplorerView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_files_list.*
 import kotlinx.android.synthetic.main.fragment_files_list.view.*
 
-class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, ViewCallbacks {
+class FilesListFragment : Fragment(), FileListMvpView {
 
     private lateinit var adapter: FilesListAdapter
     private lateinit var listener: OnFilesFragmentInteraction
 
     private lateinit var presenter: FilesListPresenter
     private lateinit var path: String
-
-    private var updateButton: MenuItem? = null
     private lateinit var progressView: View
 
+    private var updateButton: MenuItem? = null
     private lateinit var actionMode: ActionMode
 
     interface OnFilesFragmentInteraction {
@@ -50,7 +45,7 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
         const val SAVED_ACTIONMODE = "ActionMode"
         const val SAVED_SELECTED = "SelectedItems"
 
-        fun newInstance(path: String) : FilesListFragment {
+        fun newInstance(path: String): FilesListFragment {
             Log.d(TAG, "New Instacne")
             val fragment = FilesListFragment()
             val bundle = Bundle()
@@ -66,10 +61,10 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View?{
-         path = arguments.getString(ARG_PATH)
-        (context as AppCompatActivity).supportActionBar?.title = path.split("/").last()
-        (context as AppCompatActivity).supportActionBar?.subtitle = path
+                              savedInstanceState: Bundle?): View? {
+        path = arguments.getString(ARG_PATH)
+        (context as AppCompatActivity).supportActionBar?.title = path.substringAfterLast("/")
+        (context as AppCompatActivity).supportActionBar?.subtitle = path.substringBeforeLast("/")
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_files_list, container, false)
     }
@@ -78,11 +73,12 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
         super.onViewCreated(view, savedInstanceState)
 
         Log.d(TAG, "onViewCreated: $path")
-        adapter = FilesListAdapter(context, this)
-        recycler_view.adapter = adapter
         presenter = FilesListPresenter()
         presenter.onAttach(this)
         presenter.getFilesInFolder(path)
+        adapter = FilesListAdapter(context, presenter)
+        recycler_view.adapter = adapter
+
 
         val columnsCnt = context.resources.getInteger(R.integer.grid_column_cnt)
         recycler_view.layoutManager = GridLayoutManager(context, columnsCnt)
@@ -92,10 +88,8 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
 
         if (savedInstanceState != null) {
             val actionModeActive = savedInstanceState.getBoolean(SAVED_ACTIONMODE)
-            if( actionModeActive) {
-                startActionMode()
-                adapter.checked = savedInstanceState.getIntegerArrayList(SAVED_SELECTED)
-                actionMode.title = context.getString(R.string.checked_files, adapter.checked.size)
+            if (actionModeActive) {
+                presenter.restoreActionMode(savedInstanceState.getIntegerArrayList(SAVED_SELECTED))
             }
         }
 
@@ -112,12 +106,12 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState?.putBoolean(SAVED_ACTIONMODE, adapter.actionMode)
-        outState?.putIntegerArrayList(SAVED_SELECTED, adapter.checked)
+          outState?.putBoolean(SAVED_ACTIONMODE, presenter.isActionModeActive)
+         outState?.putIntegerArrayList(SAVED_SELECTED, presenter.checked)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when(item?.itemId) {
+        return when (item?.itemId) {
             R.id.action_refresh -> {
                 presenter.getFilesInFolder(path)
                 true
@@ -126,57 +120,6 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
         }
     }
 
-    override fun onItemClick(file: File) {
-        if (file.isDirectory) listener.onDirectorySelected(file)
-        else listener.onFileSelected(file)
-    }
-
-    override fun onItemChecked(position: Int) {
-        adapter.toggleSelection(position)
-        actionMode.title = context.getString(R.string.checked_files, adapter.checked.size)
-        if (adapter.checked.size == 0) {
-            actionMode.finish()
-        }
-    }
-
-    override fun onItemLongClick(position: Int) {
-        startActionMode()
-        onItemChecked(position)
-    }
-
-    private fun startActionMode() {
-        (activity as AppCompatActivity).toolbar.startActionMode(object : ActionMode.Callback {
-            override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
-                return when(p1?.itemId) {
-                    R.id.action_delete -> {
-                        val list: List<File> = adapter.checked.map { adapter.items[it]  }
-                        presenter.removeFiles(ArrayList(list))
-                        actionMode.finish()
-                        return true
-                    }
-                    else -> false
-                }
-            }
-
-            override fun onCreateActionMode(p0: ActionMode?, menu: Menu?): Boolean {
-                activity.menuInflater.inflate(R.menu.menu_fileslist_context, menu)
-                if (p0 != null) {
-                    actionMode = p0
-                    return true
-                }
-                return false
-            }
-
-            override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean {
-                return false
-            }
-
-            override fun onDestroyActionMode(p0: ActionMode?) {
-                adapter.onActionModeDestroyed()
-            }
-        })
-        adapter.actionMode = true
-    }
 
     override fun onLoadingStart() {
         Log.d(TAG, "onLoadingStart")
@@ -191,7 +134,6 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
         Log.d(TAG, "onLoadingFinshed")
         progress_bar.visibility = View.GONE
         recycler_view.visibility = View.VISIBLE
-        adapter.items = items
         error_layout.visibility = View.GONE
         updateButton?.actionView = null
     }
@@ -213,10 +155,59 @@ class FilesListFragment : Fragment(), FilesListAdapter.OnItemClickListener, View
 
     override fun onFilesDeleted() {
         Toast.makeText(context, "files deleted", Toast.LENGTH_SHORT).show()
+
     }
 
-    override fun onFileDeleted(num: Int, max: Int, file: File) {
-        Toast.makeText(context, "${num+1}/$max files deleted", Toast.LENGTH_SHORT).show()
-        adapter.remove(file)
+    override fun onFileDeleted(num: Int, max: Int) {
+        adapter.notifyDataSetChanged()
+        Toast.makeText(context, "${num + 1}/$max files deleted", Toast.LENGTH_SHORT).show()
     }
+
+    override fun startActionMode() {
+        (activity as AppCompatActivity).toolbar.startActionMode(object : ActionMode.Callback {
+            override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
+                return when (p1?.itemId) {
+                    R.id.action_delete -> {
+                        presenter.performDeletion()
+                        return true
+                    }
+                    else -> false
+                }
+            }
+
+            override fun onCreateActionMode(p0: ActionMode?, menu: Menu?): Boolean {
+                activity.menuInflater.inflate(R.menu.menu_fileslist_context, menu)
+                actionMode = p0!!
+                return true
+            }
+
+            override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                return false
+            }
+
+            override fun onDestroyActionMode(p0: ActionMode?) {
+                presenter.onActionModeDestroy()
+            }
+        })
+    }
+
+    override fun destroyActionMode() {
+        actionMode.finish()
+    }
+
+
+    override fun onFolderSelected(file: File) {
+        listener.onDirectorySelected(file)
+    }
+
+
+    override fun onFileSelected(file: File) {
+        listener.onFileSelected(file)
+    }
+
+    override fun updateActionMode(itemsCount: Int) {
+        adapter.notifyDataSetChanged()
+        actionMode.title = context.getString(R.string.checked_files, itemsCount)
+    }
+
 }

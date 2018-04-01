@@ -3,86 +3,104 @@ package cz.levinzonr.filemanager.presenter
 import android.util.Log
 import cz.levinzonr.filemanager.model.DataManager
 import cz.levinzonr.filemanager.model.File
-import cz.levinzonr.filemanager.view.fileslist.FilesListFragment
+import cz.levinzonr.filemanager.view.fileslist.FileListMvpView
+import cz.levinzonr.filemanager.view.fileslist.RecyclerItemView
 import io.reactivex.Observable
-import io.reactivex.ObservableSource
-import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 
-class FilesListPresenter : Presenter<FilesListFragment> {
+class FilesListPresenter : Presenter<FileListMvpView>() {
 
-    private var view: FilesListFragment? = null
-    private val dataManager = DataManager()
-    private var disposable: Disposable? = null
-    private lateinit var list: ArrayList<File>
 
-    override fun onAttach(view: FilesListFragment) {
-        this.view = view
+    lateinit var checked: ArrayList<Int>
+    var isActionModeActive =  false
 
+    override fun onAttach(view: FileListMvpView) {
+        super.onAttach(view)
+        checked = ArrayList()
     }
 
    companion object {
        const val TAG = "FileListPresenter"
    }
 
-    fun getFilesInFolder(path: String) {
-        view?.onLoadingStart()
-         disposable = Observable.just(path)
-                 .map { t -> dataManager.getFilesFromDirectory(t)  }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableObserver<ArrayList<File>>(){
-                    override fun onComplete() {
-                        Log.d(TAG, "onComplete")
-                        view?.onLoadingFinished(list)
-                    }
-
-                    override fun onNext(t: ArrayList<File>) {
-                        Log.d(TAG, "onNExt")
-                        list = t
-                    }
-
-                    override fun onError(e: Throwable) {
-                        Log.d(TAG, "onError")
-                        view?.onError(e.toString())
-                    }
-                })
-    }
-
-
-
-    fun removeFiles(list : ArrayList<File>) {
-       Observable.fromIterable(list)
+    fun performDeletion() {
+       disposable.add(Observable.fromIterable(checked)
+               .map { items[it] }
                .map { java.io.File(it.path) }
                .map { dataManager.removeFile(it) }
-               .map { list.indexOf(it) }
                .subscribeOn(Schedulers.io())
                .observeOn(AndroidSchedulers.mainThread())
-               .subscribeWith(object :DisposableObserver<Int>(){
+               .subscribeWith(object :DisposableObserver<File>(){
+                   var cnt = 0
                    override fun onComplete() {
                     Log.d(TAG, "Done all")
-                       view?.onFilesDeleted()
+                       (view as FileListMvpView).onFilesDeleted()
+                       onActionModeDestroy()
                    }
-
-                   override fun onNext(t: Int) {
-                    Log.d(TAG, "done prosceeing $t")
-                       view?.onFileDeleted(t, list.size, list[t])
+                   override fun onNext(t: File) {
+                        Log.d(TAG, "done prosceeing $t")
+                        items.remove(t)
+                       (view as FileListMvpView).onFileDeleted(cnt++, checked.size)
                    }
 
                    override fun onError(e: Throwable) {
-                     Log.d(TAG, "error")
+                     Log.d(TAG, "error $e")
                    }
-               })
+               }))
     }
 
-    override fun onDetach() {
-        view = null
-        Log.d(TAG, "Dispose")
-        disposable?.dispose()
+    override fun onLongClick(position: Int) {
+        (view as FileListMvpView).startActionMode()
+        isActionModeActive = true
+        markItemAtPosition(position)
     }
+
+    fun onActionModeDestroy() {
+        isActionModeActive = false
+        (view as FileListMvpView).destroyActionMode()
+        checked.clear()
+        (view as FileListMvpView).updateActionMode(0)
+    }
+
+    private fun markItemAtPosition(pos: Int) {
+        if (checked.contains(pos)) {
+            checked.remove(pos)
+        } else {
+            checked.add(pos)
+        }
+        if (checked.size == 0) {
+            onActionModeDestroy()
+        }
+        (view as FileListMvpView).updateActionMode(checked.size)
+    }
+
+    override fun onFileSelected(pos: Int) {
+        val file = items[pos]
+        when {
+            isActionModeActive -> markItemAtPosition(pos)
+            file.isDirectory -> view?.onFolderSelected(file)
+            else -> view?.onFileSelected(file)
+        }
+    }
+
+    fun restoreActionMode(restored: ArrayList<Int>) {
+        (view as FileListMvpView).startActionMode()
+        isActionModeActive = true
+        checked = restored
+        (view as FileListMvpView).updateActionMode(checked.size)
+    }
+
+
+    override fun bindItemAtPosition(pos: Int, view: RecyclerItemView) {
+        val file = items[pos]
+        when {
+            checked.contains(pos) -> view.setCheckedView(file.name)
+            file.isDirectory -> view.setFolderView(file.name)
+            else -> view.setFileView(file.name)
+        }
+    }
+
 }

@@ -38,6 +38,8 @@ open class FilesPresenter : BasePresenter<BaseFileListView>{
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableObserver<ArrayList<File>>(){
                     override fun onComplete() {
+                        val file = java.io.File(path)
+                        view?.setParentButton(file.parent != null && file.parentFile.listFiles() != null)
                         Log.d(FilesListCabPresenter.TAG, "onComplete")
                         view?.onLoadingFinished(items)
                     }

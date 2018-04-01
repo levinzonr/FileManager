@@ -9,4 +9,5 @@ interface BaseFileListView {
     fun onError(e: String)
     fun onFolderSelected(file: File)
     fun onFileSelected(file: File)
+    fun setParentButton(enabled: Boolean)
 }

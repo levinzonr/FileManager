@@ -8,6 +8,7 @@ import android.view.*
 import android.widget.Toast
 
 import cz.levinzonr.filemanager.R
+import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.presenter.FilesListCabPresenter
 import cz.levinzonr.filemanager.view.files.BaseFileListFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -37,8 +38,6 @@ class FileListCabFragment : BaseFileListFragment(), FileListCabView {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         path = arguments.getString(ARG_PATH)
-        (context as AppCompatActivity).supportActionBar?.title = path.substringAfterLast("/")
-        (context as AppCompatActivity).supportActionBar?.subtitle = path.substringBeforeLast("/")
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_files_list, container, false)
     }
@@ -116,6 +115,12 @@ class FileListCabFragment : BaseFileListFragment(), FileListCabView {
     override fun updateActionMode(itemsCount: Int) {
         adapter.notifyDataSetChanged()
         actionMode.title = context.getString(R.string.checked_files, itemsCount)
+    }
+
+    override fun onLoadingFinished(items: ArrayList<File>) {
+        super.onLoadingFinished(items)
+        (context as AppCompatActivity).supportActionBar?.title = path.substringAfterLast("/")
+        (context as AppCompatActivity).supportActionBar?.subtitle = path.substringBeforeLast("/")
     }
 
 }

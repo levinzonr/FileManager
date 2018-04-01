@@ -62,4 +62,5 @@ class PreferencesActivity : AppCompatActivity(), PreferencesFragment.OnPreferenc
         super.onActivityResult(requestCode, resultCode, data)
     }
 
+
 }

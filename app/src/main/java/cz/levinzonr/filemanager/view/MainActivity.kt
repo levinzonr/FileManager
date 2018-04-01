@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity(), BaseFileListFragment.OnFilesFragmentIn
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        SharedPreferencesHelpers(this).initPreferences()
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {

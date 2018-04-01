@@ -77,4 +77,7 @@ class FolderChooserActivity : AppCompatActivity(), BaseFileListFragment.OnFilesF
                 .setTransition(FragmentTransaction.TRANSIT_ENTER_MASK)
                 .commit()
     }
+
+
+
 }

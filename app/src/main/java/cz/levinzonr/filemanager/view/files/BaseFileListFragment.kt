@@ -72,6 +72,16 @@ open class BaseFileListFragment : Fragment(), BaseFileListView {
         presenter.getFilesInFolder(path)
         adapter = FilesListAdapter(context, presenter)
         recycler_view.adapter = adapter
+        button_back.setOnClickListener({
+            if (activity.supportFragmentManager.backStackEntryCount == 0) {
+                val parent = java.io.File(path).parentFile
+                path = parent.path
+                arguments.putString(ARG_PATH, path)
+                presenter.getFilesInFolder(path)
+            } else {
+                activity.onBackPressed()
+            }
+        })
 
 
         val columnsCnt = context.resources.getInteger(R.integer.grid_column_cnt)
@@ -96,6 +106,7 @@ open class BaseFileListFragment : Fragment(), BaseFileListView {
         progressView = LayoutInflater.from(context).inflate(R.layout.content_progress_bar, null)
         progressView.progress_bar.indeterminateDrawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN)
 
+
     }
 
 
@@ -109,6 +120,11 @@ open class BaseFileListFragment : Fragment(), BaseFileListView {
         }
     }
 
+    override fun setParentButton(enabled: Boolean) {
+        button_back.isEnabled = enabled
+        if (enabled) button_back.visibility = View.VISIBLE
+        else button_back.visibility = View.GONE
+    }
 
     override fun onLoadingStart() {
         Log.d(TAG, "onLoadingStart")
@@ -121,6 +137,7 @@ open class BaseFileListFragment : Fragment(), BaseFileListView {
 
     override fun onLoadingFinished(items: ArrayList<File>) {
         Log.d(TAG, "onLoadingFinshed")
+        adapter.notifyDataSetChanged()
         progress_bar.visibility = View.GONE
         recycler_view.visibility = View.VISIBLE
         error_layout.visibility = View.GONE
@@ -151,7 +168,5 @@ open class BaseFileListFragment : Fragment(), BaseFileListView {
     override fun onFileSelected(file: File) {
         listener.onFileSelected(file)
     }
-
-
 
 }

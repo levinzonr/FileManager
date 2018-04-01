@@ -6,26 +6,24 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.webkit.MimeTypeMap
 import android.widget.Toast
-import cz.levinzonr.filemanager.BuildConfig
 import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.view.fileslist.FilesListFragment
+import cz.levinzonr.filemanager.view.folderchooser.BaseFileListFragment
 import cz.levinzonr.filemanager.view.preferences.PreferencesActivity
 
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), FilesListFragment.OnFilesFragmentInteraction {
+class MainActivity : AppCompatActivity(), BaseFileListFragment.OnFilesFragmentInteraction {
 
     companion object {
         const val TAG = "MainActivity"

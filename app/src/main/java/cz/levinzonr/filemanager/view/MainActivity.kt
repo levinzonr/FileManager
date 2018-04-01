@@ -2,12 +2,9 @@ package cz.levinzonr.filemanager.view
 
 import android.Manifest
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -15,9 +12,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.webkit.MimeTypeMap
-import android.widget.Toast
 import cz.levinzonr.filemanager.R
-import cz.levinzonr.filemanager.helpers.SharedPreferencesHelpers
+import cz.levinzonr.filemanager.helpers.PreferenceHelper
 import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.view.files.fileslist.FileListCabFragment
 import cz.levinzonr.filemanager.view.files.BaseFileListFragment
@@ -43,7 +39,7 @@ class MainActivity : AppCompatActivity(), BaseFileListFragment.OnFilesFragmentIn
             finish()
         } else {
             if (savedInstanceState == null)
-                loadFragment(SharedPreferencesHelpers(this).defaultPath(), false)
+                loadFragment(PreferenceHelper.getInstance(this).defaultPath(), false)
         }
     }
 

@@ -1,16 +1,11 @@
 package cz.levinzonr.filemanager.view.preferences
 
 import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
-import android.support.v7.preference.PreferenceManager
-import android.util.Log
 import cz.levinzonr.filemanager.R
-import cz.levinzonr.filemanager.helpers.SharedPreferencesHelpers
-import java.util.prefs.PreferenceChangeEvent
+import cz.levinzonr.filemanager.helpers.PreferenceHelper
 
 
 class PreferencesFragment : PreferenceFragmentCompat(), PreferencesMvpView {
@@ -28,7 +23,7 @@ class PreferencesFragment : PreferenceFragmentCompat(), PreferencesMvpView {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences_app, rootKey)
         dirPreference = findPreference(PREF_DIR)
-        dirPreference.summary = SharedPreferencesHelpers(activity.applicationContext).defaultPath()
+        dirPreference.summary = PreferenceHelper(activity.applicationContext).defaultPath()
 
     }
 

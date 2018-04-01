@@ -1,11 +1,10 @@
 package cz.levinzonr.filemanager.presenter
 
 import android.app.Application
-import cz.levinzonr.filemanager.helpers.SharedPreferencesHelpers
+import cz.levinzonr.filemanager.helpers.PreferenceHelper
 import cz.levinzonr.filemanager.view.preferences.PreferencesMvpView
 
-class SettingsPresenter(application: Application) : BasePresenter<PreferencesMvpView> {
-    private var prefs = SharedPreferencesHelpers(application)
+class SettingsPresenter(val application: Application) : BasePresenter<PreferencesMvpView> {
     private var view : PreferencesMvpView? = null
 
     override fun onAttach(view: PreferencesMvpView) {
@@ -13,7 +12,7 @@ class SettingsPresenter(application: Application) : BasePresenter<PreferencesMvp
     }
 
     fun setDefaultDir(path: String) {
-        prefs.updatePath(path)
+        PreferenceHelper.getInstance(application).updatePath(path)
         view?.onDirectoryChanged(path)
     }
 

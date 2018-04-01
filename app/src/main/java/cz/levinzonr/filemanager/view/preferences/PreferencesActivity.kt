@@ -1,15 +1,12 @@
 package cz.levinzonr.filemanager.view.preferences
 
-import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Environment
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import cz.levinzonr.filemanager.R
-import cz.levinzonr.filemanager.helpers.SharedPreferencesHelpers
+import cz.levinzonr.filemanager.helpers.PreferenceHelper
 import cz.levinzonr.filemanager.presenter.SettingsPresenter
 import cz.levinzonr.filemanager.view.files.folderchooser.FolderChooserActivity
 
@@ -46,7 +43,7 @@ class PreferencesActivity : AppCompatActivity(), PreferencesFragment.OnPreferenc
     }
 
     override fun onSelect() {
-        FolderChooserActivity.startForResult(this, SharedPreferencesHelpers(this).defaultPath(),RC_CODE)
+        FolderChooserActivity.startForResult(this, PreferenceHelper(this).defaultPath(),RC_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

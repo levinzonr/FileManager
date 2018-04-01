@@ -17,7 +17,7 @@ import cz.levinzonr.filemanager.presenter.FilesPresenter
 import kotlinx.android.synthetic.main.fragment_files_list.*
 import kotlinx.android.synthetic.main.fragment_files_list.view.*
 
-abstract class BaseFileListFragment : Fragment(), BaseFileListView {
+open class BaseFileListFragment : Fragment(), BaseFileListView {
 
     protected lateinit var adapter: FilesListAdapter
     private lateinit var listener: OnFilesFragmentInteraction
@@ -62,9 +62,13 @@ abstract class BaseFileListFragment : Fragment(), BaseFileListView {
         }
     }
 
-    abstract fun initPresenter()
+    open fun initPresenter() {
+        presenter = FilesPresenter()
+    }
 
-    abstract fun presenter() : FilesPresenter
+    open fun presenter() : FilesPresenter {
+        return presenter
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)

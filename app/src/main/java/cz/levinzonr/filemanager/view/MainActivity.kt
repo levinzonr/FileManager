@@ -17,7 +17,7 @@ import android.webkit.MimeTypeMap
 import android.widget.Toast
 import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.File
-import cz.levinzonr.filemanager.view.fileslist.FileListCabFragment
+import cz.levinzonr.filemanager.view.files.fileslist.FileListCabFragment
 import cz.levinzonr.filemanager.view.files.BaseFileListFragment
 import cz.levinzonr.filemanager.view.preferences.PreferencesActivity
 

@@ -2,7 +2,7 @@ package cz.levinzonr.filemanager.presenter
 
 import android.util.Log
 import cz.levinzonr.filemanager.model.File
-import cz.levinzonr.filemanager.view.fileslist.FileListCabView
+import cz.levinzonr.filemanager.view.files.fileslist.FileListCabView
 import cz.levinzonr.filemanager.view.files.RecyclerItemView
 import cz.levinzonr.filemanager.view.files.BaseFileListView
 import io.reactivex.Observable
@@ -27,8 +27,9 @@ class FilesListCabPresenter : FilesPresenter() {
    }
 
     fun performDeletion() {
+        val tmpList = ArrayList(items)
        disposable.add(Observable.fromIterable(checked)
-               .map { items[it] }
+               .map { tmpList[it] }
                .map { java.io.File(it.path) }
                .map { dataManager.removeFile(it) }
                .subscribeOn(Schedulers.io())

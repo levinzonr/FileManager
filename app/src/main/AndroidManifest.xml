@@ -27,7 +27,7 @@
             android:label="@string/title_activity_preferences"
             android:theme="@style/AppTheme.SettingsTheme" />
         <activity
-            android:name=".view.folderchooser.FolderChooserActivity"
+            android:name="cz.levinzonr.filemanager.view.files.folderchooser.FolderChooserActivity"
             android:label="@string/title_activity_folder_chooser"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

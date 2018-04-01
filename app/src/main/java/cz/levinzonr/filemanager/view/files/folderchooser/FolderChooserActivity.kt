@@ -1,7 +1,6 @@
-package cz.levinzonr.filemanager.view.folderchooser
+package cz.levinzonr.filemanager.view.files.folderchooser
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import cz.levinzonr.filemanager.R
 

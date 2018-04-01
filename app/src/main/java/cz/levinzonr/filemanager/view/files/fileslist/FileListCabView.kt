@@ -1,4 +1,4 @@
-package cz.levinzonr.filemanager.view.fileslist
+package cz.levinzonr.filemanager.view.files.fileslist
 
 import cz.levinzonr.filemanager.view.files.BaseFileListView
 

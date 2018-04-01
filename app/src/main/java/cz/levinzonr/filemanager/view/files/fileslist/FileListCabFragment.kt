@@ -1,4 +1,4 @@
-package cz.levinzonr.filemanager.view.fileslist
+package cz.levinzonr.filemanager.view.files.fileslist
 
 
 import android.os.Bundle
@@ -41,6 +41,16 @@ class FileListCabFragment : BaseFileListFragment(), FileListCabView {
         (context as AppCompatActivity).supportActionBar?.subtitle = path.substringBeforeLast("/")
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_files_list, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (savedInstanceState != null) {
+            val active = savedInstanceState.getBoolean(SAVED_ACTIONMODE)
+            if (active) {
+                presenter().restoreActionMode(savedInstanceState.getIntegerArrayList(SAVED_SELECTED))
+            }
+        }
     }
 
     override fun initPresenter() {

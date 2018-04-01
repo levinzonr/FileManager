@@ -11,7 +11,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 
-abstract class FilesPresenter : BasePresenter<BaseFileListView>{
+open class FilesPresenter : BasePresenter<BaseFileListView>{
 
     protected var view: BaseFileListView? = null
     protected val dataManager = DataManager()
@@ -54,12 +54,23 @@ abstract class FilesPresenter : BasePresenter<BaseFileListView>{
                 }))
     }
 
-    abstract fun bindItemAtPosition(pos: Int, view: RecyclerItemView)
 
     fun itemsCount() = items.size
 
-    abstract fun onFileSelected(pos: Int)
+    open fun bindItemAtPosition(pos: Int, view: RecyclerItemView) {
+        val file = items[pos]
+        when {
+            file.isDirectory -> view.setFolderView(file.name)
+            else -> view.setCheckedView(file.name)
+        }
+    }
 
-    abstract fun onLongClick(pos: Int)
+    open fun onFileSelected(pos: Int) {
+        if (items[pos].isDirectory) view?.onFolderSelected(items[pos])
+    }
+
+    open fun onLongClick(pos: Int) {
+        // do nothinh
+    }
 
 }

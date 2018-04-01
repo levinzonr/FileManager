@@ -7,7 +7,7 @@
 
     <FrameLayout
         android:id="@+id/container"
-        android:layout_weight="9"
+        android:layout_weight="20"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -15,7 +15,8 @@
     </FrameLayout>
 
     <Button
-        android:layout_weight="1"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_weight="0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

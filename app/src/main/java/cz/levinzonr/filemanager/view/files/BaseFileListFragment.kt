@@ -13,9 +13,7 @@ import android.view.*
 
 import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.File
-import cz.levinzonr.filemanager.presenter.FilesListCabPresenter
 import cz.levinzonr.filemanager.presenter.FilesPresenter
-import cz.levinzonr.filemanager.view.fileslist.FilesListAdapter
 import kotlinx.android.synthetic.main.fragment_files_list.*
 import kotlinx.android.synthetic.main.fragment_files_list.view.*
 
@@ -50,7 +48,7 @@ abstract class BaseFileListFragment : Fragment(), BaseFileListView {
         super.onViewCreated(view, savedInstanceState)
 
         Log.d(TAG, "onViewCreated: $path")
-        presenter = initPresenter()
+        initPresenter()
         presenter.onAttach(this)
         presenter.getFilesInFolder(path)
         adapter = FilesListAdapter(context, presenter)
@@ -64,9 +62,9 @@ abstract class BaseFileListFragment : Fragment(), BaseFileListView {
         }
     }
 
-    abstract fun initPresenter() : FilesPresenter
+    abstract fun initPresenter()
 
-    abstract fun getPresenter() : FilesListCabPresenter
+    abstract fun presenter() : FilesPresenter
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)

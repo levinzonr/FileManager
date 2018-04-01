@@ -1,6 +1,6 @@
 package cz.levinzonr.filemanager.presenter
 
-import cz.levinzonr.filemanager.view.fileslist.RecyclerItemView
+import cz.levinzonr.filemanager.view.files.RecyclerItemView
 
 class SimpleFileListPresenter : FilesPresenter() {
 

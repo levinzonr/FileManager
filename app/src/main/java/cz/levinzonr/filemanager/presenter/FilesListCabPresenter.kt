@@ -3,7 +3,7 @@ package cz.levinzonr.filemanager.presenter
 import android.util.Log
 import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.view.fileslist.FileListCabView
-import cz.levinzonr.filemanager.view.fileslist.RecyclerItemView
+import cz.levinzonr.filemanager.view.files.RecyclerItemView
 import cz.levinzonr.filemanager.view.files.BaseFileListView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers

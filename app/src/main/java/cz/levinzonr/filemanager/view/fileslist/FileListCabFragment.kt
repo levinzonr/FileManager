@@ -43,18 +43,18 @@ class FileListCabFragment : BaseFileListFragment(), FileListCabView {
         return inflater.inflate(R.layout.fragment_files_list, container, false)
     }
 
-    override fun initPresenter(): FilesListCabPresenter {
-        return FilesListCabPresenter()
+    override fun initPresenter() {
+       presenter = FilesListCabPresenter()
     }
 
-    override fun getPresenter(): FilesListCabPresenter {
+    override fun presenter(): FilesListCabPresenter {
         return presenter as FilesListCabPresenter
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-          outState?.putBoolean(SAVED_ACTIONMODE, getPresenter().isActionModeActive)
-         outState?.putIntegerArrayList(SAVED_SELECTED, getPresenter().checked)
+          outState?.putBoolean(SAVED_ACTIONMODE, presenter().isActionModeActive)
+         outState?.putIntegerArrayList(SAVED_SELECTED, presenter().checked)
     }
 
 
@@ -74,7 +74,7 @@ class FileListCabFragment : BaseFileListFragment(), FileListCabView {
             override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
                 return when (p1?.itemId) {
                     R.id.action_delete -> {
-                        getPresenter().performDeletion()
+                        presenter().performDeletion()
                         return true
                     }
                     else -> false
@@ -92,7 +92,7 @@ class FileListCabFragment : BaseFileListFragment(), FileListCabView {
             }
 
             override fun onDestroyActionMode(p0: ActionMode?) {
-                getPresenter().onActionModeDestroy()
+                presenter().onActionModeDestroy()
             }
         })
     }

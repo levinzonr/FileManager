@@ -25,7 +25,11 @@
         <activity
             android:name=".view.preferences.PreferencesActivity"
             android:label="@string/title_activity_preferences"
-            android:theme="@style/AppTheme.SettingsTheme"/>
+            android:theme="@style/AppTheme.SettingsTheme" />
+        <activity
+            android:name=".view.folderchooser.FolderChooserActivity"
+            android:label="@string/title_activity_folder_chooser"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

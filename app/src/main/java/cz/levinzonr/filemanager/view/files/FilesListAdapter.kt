@@ -1,4 +1,4 @@
-package cz.levinzonr.filemanager.view.fileslist
+package cz.levinzonr.filemanager.view.files
 
 import android.content.Context
 import android.graphics.Color

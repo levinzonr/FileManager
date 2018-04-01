@@ -25,7 +25,7 @@ open class BaseFileListFragment : Fragment(), BaseFileListView {
     private lateinit var listener: OnFilesFragmentInteraction
 
     protected lateinit var presenter: FilesPresenter
-    protected lateinit var path: String
+    lateinit var path: String
     private lateinit var progressView: View
 
     private var updateButton: MenuItem? = null
@@ -33,6 +33,7 @@ open class BaseFileListFragment : Fragment(), BaseFileListView {
     interface OnFilesFragmentInteraction {
         fun onFileSelected(file: File)
         fun onDirectorySelected(file: File)
+        fun onUpButtonClikced(path: String)
     }
 
 
@@ -76,6 +77,7 @@ open class BaseFileListFragment : Fragment(), BaseFileListView {
             if (activity.supportFragmentManager.backStackEntryCount == 0) {
                 val parent = java.io.File(path).parentFile
                 path = parent.path
+                listener.onUpButtonClikced(path)
                 arguments.putString(ARG_PATH, path)
                 presenter.getFilesInFolder(path)
             } else {

@@ -79,5 +79,7 @@ class FolderChooserActivity : AppCompatActivity(), BaseFileListFragment.OnFilesF
     }
 
 
-
+    override fun onUpButtonClikced(path: String) {
+        this.path = path
+    }
 }

@@ -84,4 +84,7 @@ class MainActivity : AppCompatActivity(), BaseFileListFragment.OnFilesFragmentIn
         loadFragment(file.path)
     }
 
+    override fun onUpButtonClikced(path: String) {
+    }
+
 }

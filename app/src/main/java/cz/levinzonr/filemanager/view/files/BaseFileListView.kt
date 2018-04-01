@@ -1,8 +1,8 @@
-package cz.levinzonr.filemanager.view.folderchooser
+package cz.levinzonr.filemanager.view.files
 
 import cz.levinzonr.filemanager.model.File
 
-interface FileExplorerView {
+interface BaseFileListView {
 
     fun onLoadingStart()
     fun onLoadingFinished(items: ArrayList<File>)

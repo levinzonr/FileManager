@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import cz.levinzonr.filemanager.R
-import cz.levinzonr.filemanager.presenter.FilesListPresenter
 import cz.levinzonr.filemanager.presenter.FilesPresenter
 import kotlinx.android.synthetic.main.item_file.view.*
 

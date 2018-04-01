@@ -4,21 +4,21 @@ import android.util.Log
 import cz.levinzonr.filemanager.model.DataManager
 import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.view.fileslist.RecyclerItemView
-import cz.levinzonr.filemanager.view.folderchooser.FileExplorerView
+import cz.levinzonr.filemanager.view.files.BaseFileListView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 
-abstract class FilesPresenter : BasePresenter<FileExplorerView>{
+abstract class FilesPresenter : BasePresenter<BaseFileListView>{
 
-    protected var view: FileExplorerView? = null
+    protected var view: BaseFileListView? = null
     protected val dataManager = DataManager()
     protected var disposable = CompositeDisposable()
     protected lateinit var items: ArrayList<File>
 
-    override fun onAttach(view: FileExplorerView) {
+    override fun onAttach(view: BaseFileListView) {
         this.view = view
         items = ArrayList()
     }
@@ -38,17 +38,17 @@ abstract class FilesPresenter : BasePresenter<FileExplorerView>{
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableObserver<ArrayList<File>>(){
                     override fun onComplete() {
-                        Log.d(FilesListPresenter.TAG, "onComplete")
+                        Log.d(FilesListCabPresenter.TAG, "onComplete")
                         view?.onLoadingFinished(items)
                     }
 
                     override fun onNext(t: ArrayList<File>) {
-                        Log.d(FilesListPresenter.TAG, "onNExt")
+                        Log.d(FilesListCabPresenter.TAG, "onNExt")
                         items = t
                     }
 
                     override fun onError(e: Throwable) {
-                        Log.d(FilesListPresenter.TAG, "onError")
+                        Log.d(FilesListCabPresenter.TAG, "onError")
                         view?.onError(e.toString())
                     }
                 }))

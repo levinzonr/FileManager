@@ -2,22 +2,22 @@ package cz.levinzonr.filemanager.presenter
 
 import android.util.Log
 import cz.levinzonr.filemanager.model.File
-import cz.levinzonr.filemanager.view.fileslist.FileListMvpView
+import cz.levinzonr.filemanager.view.fileslist.FileListCabView
 import cz.levinzonr.filemanager.view.fileslist.RecyclerItemView
-import cz.levinzonr.filemanager.view.folderchooser.FileExplorerView
+import cz.levinzonr.filemanager.view.files.BaseFileListView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 
-class FilesListPresenter : FilesPresenter() {
+class FilesListCabPresenter : FilesPresenter() {
 
 
     lateinit var checked: ArrayList<Int>
     var isActionModeActive =  false
 
 
-    override fun onAttach(view: FileExplorerView) {
+    override fun onAttach(view: BaseFileListView) {
         super.onAttach(view)
         checked = ArrayList()
     }
@@ -37,13 +37,13 @@ class FilesListPresenter : FilesPresenter() {
                    var cnt = 0
                    override fun onComplete() {
                     Log.d(TAG, "Done all")
-                       (view as FileListMvpView).onFilesDeleted()
+                       (view as FileListCabView).onFilesDeleted()
                        onActionModeDestroy()
                    }
                    override fun onNext(t: File) {
                         Log.d(TAG, "done prosceeing $t")
                         items.remove(t)
-                       (view as FileListMvpView).onFileDeleted(cnt++, checked.size)
+                       (view as FileListCabView).onFileDeleted(cnt++, checked.size)
                    }
 
                    override fun onError(e: Throwable) {
@@ -53,16 +53,16 @@ class FilesListPresenter : FilesPresenter() {
     }
 
     override fun onLongClick(position: Int) {
-        (view as FileListMvpView).startActionMode()
+        (view as FileListCabView).startActionMode()
         isActionModeActive = true
         markItemAtPosition(position)
     }
 
     fun onActionModeDestroy() {
         isActionModeActive = false
-        (view as FileListMvpView).destroyActionMode()
+        (view as FileListCabView).destroyActionMode()
         checked.clear()
-        (view as FileListMvpView).updateActionMode(0)
+        (view as FileListCabView).updateActionMode(0)
     }
 
     private fun markItemAtPosition(pos: Int) {
@@ -74,7 +74,7 @@ class FilesListPresenter : FilesPresenter() {
         if (checked.size == 0) {
             onActionModeDestroy()
         }
-        (view as FileListMvpView).updateActionMode(checked.size)
+        (view as FileListCabView).updateActionMode(checked.size)
     }
 
     override fun onFileSelected(pos: Int) {
@@ -87,10 +87,10 @@ class FilesListPresenter : FilesPresenter() {
     }
 
     fun restoreActionMode(restored: ArrayList<Int>) {
-        (view as FileListMvpView).startActionMode()
+        (view as FileListCabView).startActionMode()
         isActionModeActive = true
         checked = restored
-        (view as FileListMvpView).updateActionMode(checked.size)
+        (view as FileListCabView).updateActionMode(checked.size)
     }
 
 

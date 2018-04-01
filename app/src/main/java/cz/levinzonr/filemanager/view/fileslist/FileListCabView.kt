@@ -1,8 +1,8 @@
 package cz.levinzonr.filemanager.view.fileslist
 
-import cz.levinzonr.filemanager.view.folderchooser.FileExplorerView
+import cz.levinzonr.filemanager.view.files.BaseFileListView
 
-interface FileListMvpView : FileExplorerView {
+interface FileListCabView : BaseFileListView {
 
     fun onFileDeleted(num: Int, max: Int)
 

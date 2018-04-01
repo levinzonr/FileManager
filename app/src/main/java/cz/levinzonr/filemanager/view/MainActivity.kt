@@ -17,8 +17,8 @@ import android.webkit.MimeTypeMap
 import android.widget.Toast
 import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.File
-import cz.levinzonr.filemanager.view.fileslist.FilesListFragment
-import cz.levinzonr.filemanager.view.folderchooser.BaseFileListFragment
+import cz.levinzonr.filemanager.view.fileslist.FileListCabFragment
+import cz.levinzonr.filemanager.view.files.BaseFileListFragment
 import cz.levinzonr.filemanager.view.preferences.PreferencesActivity
 
 import kotlinx.android.synthetic.main.activity_main.*
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), BaseFileListFragment.OnFilesFragmentIn
         Log.d(TAG, "Mountig fragment: $path, add: $withBackStack")
         val tr = supportFragmentManager.
                 beginTransaction()
-                .replace(R.id.container, FilesListFragment.newInstance(path))
+                .replace(R.id.container, FileListCabFragment.newInstance(path))
         if (withBackStack)
             tr.addToBackStack(null)
 

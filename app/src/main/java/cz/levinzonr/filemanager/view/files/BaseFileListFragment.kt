@@ -1,4 +1,4 @@
-package cz.levinzonr.filemanager.view.folderchooser
+package cz.levinzonr.filemanager.view.files
 
 
 import android.content.Context
@@ -6,25 +6,20 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 
 import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.File
-import cz.levinzonr.filemanager.presenter.FilesListPresenter
+import cz.levinzonr.filemanager.presenter.FilesListCabPresenter
 import cz.levinzonr.filemanager.presenter.FilesPresenter
-import cz.levinzonr.filemanager.presenter.SimpleFileListPresenter
 import cz.levinzonr.filemanager.view.fileslist.FilesListAdapter
-import cz.levinzonr.filemanager.view.folderchooser.FileExplorerView
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_files_list.*
 import kotlinx.android.synthetic.main.fragment_files_list.view.*
 
-abstract class BaseFileListFragment : Fragment(), FileExplorerView {
+abstract class BaseFileListFragment : Fragment(), BaseFileListView {
 
     protected lateinit var adapter: FilesListAdapter
     private lateinit var listener: OnFilesFragmentInteraction
@@ -71,7 +66,7 @@ abstract class BaseFileListFragment : Fragment(), FileExplorerView {
 
     abstract fun initPresenter() : FilesPresenter
 
-    abstract fun getPresenter() : FilesListPresenter
+    abstract fun getPresenter() : FilesListCabPresenter
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)

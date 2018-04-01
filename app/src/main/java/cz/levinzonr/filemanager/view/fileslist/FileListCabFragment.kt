@@ -8,25 +8,24 @@ import android.view.*
 import android.widget.Toast
 
 import cz.levinzonr.filemanager.R
-import cz.levinzonr.filemanager.presenter.FilesListPresenter
-import cz.levinzonr.filemanager.view.folderchooser.BaseFileListFragment
+import cz.levinzonr.filemanager.presenter.FilesListCabPresenter
+import cz.levinzonr.filemanager.view.files.BaseFileListFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-class FilesListFragment : BaseFileListFragment(), FileListMvpView {
+class FileListCabFragment : BaseFileListFragment(), FileListCabView {
 
-    private var updateButton: MenuItem? = null
     private lateinit var actionMode: ActionMode
 
     companion object {
 
         const val ARG_PATH = "FilePath"
-        const val TAG = "FilesListFragment"
+        const val TAG = "FileListCabFragment"
         const val SAVED_ACTIONMODE = "ActionMode"
         const val SAVED_SELECTED = "SelectedItems"
 
-        fun newInstance(path: String): FilesListFragment {
+        fun newInstance(path: String): FileListCabFragment {
             Log.d(TAG, "New Instacne")
-            val fragment = FilesListFragment()
+            val fragment = FileListCabFragment()
             val bundle = Bundle()
             bundle.putString(ARG_PATH, path)
             fragment.arguments = bundle
@@ -44,12 +43,12 @@ class FilesListFragment : BaseFileListFragment(), FileListMvpView {
         return inflater.inflate(R.layout.fragment_files_list, container, false)
     }
 
-    override fun initPresenter(): FilesListPresenter {
-        return FilesListPresenter()
+    override fun initPresenter(): FilesListCabPresenter {
+        return FilesListCabPresenter()
     }
 
-    override fun getPresenter(): FilesListPresenter {
-        return presenter as FilesListPresenter
+    override fun getPresenter(): FilesListCabPresenter {
+        return presenter as FilesListCabPresenter
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {

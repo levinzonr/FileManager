@@ -22,6 +22,7 @@ import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.view.files.fileslist.FileListCabFragment
 import cz.levinzonr.filemanager.view.files.BaseFileListFragment
 import cz.levinzonr.filemanager.view.preferences.PreferencesActivity
+import cz.levinzonr.filemanager.view.welcome.WelcomeActivity
 
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -29,7 +30,6 @@ class MainActivity : AppCompatActivity(), BaseFileListFragment.OnFilesFragmentIn
 
     companion object {
         const val TAG = "MainActivity"
-        const val RC_PERMISTION_ACCESS = 1221
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,14 +39,9 @@ class MainActivity : AppCompatActivity(), BaseFileListFragment.OnFilesFragmentIn
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-
-            Toast.makeText(this, "No permission", Toast.LENGTH_SHORT).show()
-            ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE), RC_PERMISTION_ACCESS)
-
+            startActivity(Intent(this, WelcomeActivity::class.java))
+            finish()
         } else {
-
             if (savedInstanceState == null)
                 loadFragment(SharedPreferencesHelpers(this).defaultPath(), false)
         }
@@ -87,17 +82,7 @@ class MainActivity : AppCompatActivity(), BaseFileListFragment.OnFilesFragmentIn
         startActivity(Intent.createChooser(intent, "Open with"))
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == RC_PERMISTION_ACCESS) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                Log.d(TAG, "Granter")
-            } else {
-                Log.d(TAG, "Denied")
-            }
-        }
-        Log.d(TAG, grantResults.toString())
-    }
+
 
     override fun onDirectorySelected(file: File) {
         loadFragment(file.path)

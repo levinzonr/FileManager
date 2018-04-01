@@ -16,7 +16,7 @@ import java.util.prefs.PreferenceChangeEvent
 class PreferencesFragment : PreferenceFragmentCompat(), PreferencesMvpView {
 
     private lateinit var listener: OnPreferenceFragmentInteraction
-    private  var dirPreference: Preference? = null
+    private  lateinit var dirPreference: Preference
     companion object {
         const val PREF_DIR = "pref_default_dir"
     }
@@ -28,9 +28,7 @@ class PreferencesFragment : PreferenceFragmentCompat(), PreferencesMvpView {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences_app, rootKey)
         dirPreference = findPreference(PREF_DIR)
-        if (dirPreference==null) {
-            Log.d("Pref", "null")
-        }
+        dirPreference.summary = SharedPreferencesHelpers(activity.applicationContext).defaultPath()
 
     }
 
@@ -53,6 +51,6 @@ class PreferencesFragment : PreferenceFragmentCompat(), PreferencesMvpView {
     }
 
     override fun onDirectoryChanged(value: String) {
-        dirPreference?.summary = value
+        dirPreference.summary = value
     }
 }

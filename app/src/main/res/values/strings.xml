@@ -13,4 +13,6 @@
     <string name="pref_default_dir_sum">Directory to be opened by default</string>
     <string name="title_activity_folder_chooser">FolderChooserActivity</string>
     <string name="action_confirm">Select folder</string>
+    <string name="welcome_message">This app needs your permission  to access your files</string>
+    <string name="action_continue">Continue</string>
 </resources>

@@ -15,21 +15,28 @@ class FilesListAdapter(val context:Context, val presenter: FilesPresenter) :
         RecyclerView.Adapter<FilesListAdapter.ViewHolder>() {
 
 
+    fun String.letString(start: Int, end: Int) : String{
+        if (this.length > end) {
+            return "${this.substring(start, end)}..."
+        }
+        return this
+    }
+
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) , RecyclerItemView {
 
         override fun setFileView(name: String) {
-            view.file_name.text = name
+            view.file_name.text = name.letString(0, 50)
             view.file_icon.setImageDrawable(ContextCompat.getDrawable(context,R.drawable.ic_description_black_48dp))
             view.file_icon.setColorFilter(Color.LTGRAY)
         }
 
         override fun setFolderView(name: String) {
-            view.file_name.text = name
+            view.file_name.text = name.letString(0, 50)
             view.file_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_folder_black_48dp))
             view.file_icon.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary))    }
 
         override fun setCheckedView(name: String) {
-            view.file_name.text = name
+            view.file_name.text = name.letString(0, 50)
             view.file_icon.setImageResource(R.drawable.ic_check_circle_black_48dp)
             view.file_icon.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
         }

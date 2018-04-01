@@ -10,11 +10,11 @@
         android:layout_weight="20"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-
     </FrameLayout>
 
     <Button
+        android:id="@+id/button_confirm"
+        android:text="@string/action_confirm"
         android:layout_margin="@dimen/fab_margin"
         android:layout_weight="0"
         android:layout_width="match_parent"

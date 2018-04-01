@@ -1,23 +1,23 @@
 package cz.levinzonr.filemanager.presenter
 
 import android.util.Log
-import cz.levinzonr.filemanager.model.DataManager
 import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.view.fileslist.FileListMvpView
 import cz.levinzonr.filemanager.view.fileslist.RecyclerItemView
+import cz.levinzonr.filemanager.view.folderchooser.FileExplorerView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 
-class FilesListPresenter : Presenter<FileListMvpView>() {
+class FilesListPresenter : FilesPresenter() {
 
 
     lateinit var checked: ArrayList<Int>
     var isActionModeActive =  false
 
-    override fun onAttach(view: FileListMvpView) {
+
+    override fun onAttach(view: FileExplorerView) {
         super.onAttach(view)
         checked = ArrayList()
     }

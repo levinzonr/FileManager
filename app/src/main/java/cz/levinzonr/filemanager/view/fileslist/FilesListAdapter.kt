@@ -4,21 +4,15 @@ import android.content.Context
 import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import cz.levinzonr.filemanager.R
-import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.presenter.FilesListPresenter
-import cz.levinzonr.filemanager.presenter.Presenter
-import cz.levinzonr.filemanager.view.folderchooser.FileExplorerView
+import cz.levinzonr.filemanager.presenter.FilesPresenter
 import kotlinx.android.synthetic.main.item_file.view.*
 
-class FilesListAdapter(val context:Context, val presenter: FilesListPresenter) :
+class FilesListAdapter(val context:Context, val presenter: FilesPresenter) :
         RecyclerView.Adapter<FilesListAdapter.ViewHolder>() {
 
 

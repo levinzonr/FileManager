@@ -11,19 +11,19 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 
-abstract class Presenter<in V: FileExplorerView> {
+abstract class FilesPresenter : BasePresenter<FileExplorerView>{
 
     protected var view: FileExplorerView? = null
     protected val dataManager = DataManager()
     protected var disposable = CompositeDisposable()
     protected lateinit var items: ArrayList<File>
 
-    open fun onAttach(view: V) {
+    override fun onAttach(view: FileExplorerView) {
         this.view = view
         items = ArrayList()
     }
 
-    fun onDetach() {
+    override fun onDetach() {
         if (!disposable.isDisposed) {
             disposable.clear()
         }

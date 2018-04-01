@@ -2,6 +2,7 @@ package cz.levinzonr.filemanager.view
 
 import android.Manifest
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -16,6 +17,7 @@ import android.view.MenuItem
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import cz.levinzonr.filemanager.R
+import cz.levinzonr.filemanager.helpers.SharedPreferencesHelpers
 import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.view.files.fileslist.FileListCabFragment
 import cz.levinzonr.filemanager.view.files.BaseFileListFragment
@@ -34,7 +36,7 @@ class MainActivity : AppCompatActivity(), BaseFileListFragment.OnFilesFragmentIn
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
+        SharedPreferencesHelpers(this).initPreferences()
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -47,7 +49,7 @@ class MainActivity : AppCompatActivity(), BaseFileListFragment.OnFilesFragmentIn
         } else {
 
             if (savedInstanceState == null)
-                loadFragment(Environment.getExternalStorageDirectory().absolutePath, false)
+                loadFragment(SharedPreferencesHelpers(this).defaultPath(), false)
         }
     }
 

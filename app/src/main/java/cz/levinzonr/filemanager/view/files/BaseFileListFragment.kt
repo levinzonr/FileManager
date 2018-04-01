@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.GridLayoutManager
 import android.util.Log
@@ -14,6 +15,7 @@ import android.view.*
 import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.presenter.FilesPresenter
+import cz.levinzonr.filemanager.view.files.fileslist.FileListCabFragment
 import kotlinx.android.synthetic.main.fragment_files_list.*
 import kotlinx.android.synthetic.main.fragment_files_list.view.*
 
@@ -33,15 +35,32 @@ open class BaseFileListFragment : Fragment(), BaseFileListView {
         fun onDirectorySelected(file: File)
     }
 
+
     companion object {
 
         const val ARG_PATH = "FilePath"
         const val TAG = "AbstractFilesListFrag"
+
+        fun newInstance(path: String): BaseFileListFragment {
+            Log.d(TAG, "New Instacne")
+            val fragment = BaseFileListFragment()
+            val bundle = Bundle()
+            bundle.putString(ARG_PATH, path)
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         listener = context as OnFilesFragmentInteraction
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        path = arguments.getString(FileListCabFragment.ARG_PATH)
+        setHasOptionsMenu(true)
+        return inflater.inflate(R.layout.fragment_files_list, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

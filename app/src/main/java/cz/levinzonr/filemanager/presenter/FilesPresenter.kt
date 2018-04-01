@@ -61,7 +61,7 @@ open class FilesPresenter : BasePresenter<BaseFileListView>{
         val file = items[pos]
         when {
             file.isDirectory -> view.setFolderView(file.name)
-            else -> view.setCheckedView(file.name)
+            else -> view.setFileView(file.name)
         }
     }
 

@@ -15,12 +15,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <Button
-        android:enabled="false"
-        android:id="@+id/button_back"
-        android:text="back"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+   <android.support.v7.widget.CardView
+       android:id="@+id/button_back"
+       android:layout_margin="4dp"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+
+       <LinearLayout
+           android:gravity="left|center"
+           android:orientation="horizontal"
+           android:layout_width="match_parent"
+           android:layout_height="48dp">
+
+           <ImageView
+               android:tint="@color/colorPrimary"
+               android:src="@drawable/ic_keyboard_backspace_white_24dp"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" />
+
+           <TextView
+               android:id="@+id/parent_name"
+               android:layout_marginLeft="5dp"
+               android:layout_marginStart="5dp"
+               android:text="@string/app_name"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" />
+
+       </LinearLayout>
+
+   </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.RecyclerView
         android:visibility="visible"

@@ -120,9 +120,12 @@ open class BaseFileListFragment : Fragment(), BaseFileListView {
         }
     }
 
-    override fun setParentButton(enabled: Boolean) {
+    override fun setParentButton(enabled: Boolean, parent: String) {
         button_back.isEnabled = enabled
-        if (enabled) button_back.visibility = View.VISIBLE
+        if (enabled) {
+            button_back.visibility = View.VISIBLE
+            parent_name.text = parent
+        }
         else button_back.visibility = View.GONE
     }
 
@@ -132,6 +135,7 @@ open class BaseFileListFragment : Fragment(), BaseFileListView {
         recycler_view.visibility = View.GONE
         error_layout.visibility = View.GONE
         updateButton?.actionView = progressView
+        setParentButton(false, "")
 
     }
 

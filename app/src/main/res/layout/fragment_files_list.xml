@@ -57,4 +57,10 @@
         layout="@layout/content_error"
         />
 
+    <include
+        android:visibility="gone"
+        layout="@layout/folder_empty"
+        android:id="@+id/empty_view"
+        />
+
 </LinearLayout>

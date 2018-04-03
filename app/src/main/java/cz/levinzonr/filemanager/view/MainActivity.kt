@@ -17,7 +17,6 @@ import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.helpers.PreferenceHelper
 import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.view.files.fileslist.FileListCabFragment
-import cz.levinzonr.filemanager.view.files.BaseFileListFragment
 import cz.levinzonr.filemanager.view.preferences.PreferencesActivity
 import cz.levinzonr.filemanager.view.welcome.WelcomeActivity
 
@@ -29,11 +28,12 @@ import android.os.Build
 import android.support.v4.content.ContextCompat.startActivity
 import android.support.v4.content.FileProvider
 import cz.levinzonr.filemanager.BuildConfig
+import cz.levinzonr.filemanager.view.files.SimpleFilesListFragment
 import java.nio.file.Files.isDirectory
 
 
 
-class MainActivity : AppCompatActivity(), BaseFileListFragment.OnFilesFragmentInteraction {
+class MainActivity : AppCompatActivity(), SimpleFilesListFragment.OnFilesFragmentInteraction {
 
     companion object {
         const val TAG = "MainActivity"

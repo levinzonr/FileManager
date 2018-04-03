@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.GridLayoutManager
 import android.util.Log
@@ -19,7 +18,7 @@ import cz.levinzonr.filemanager.view.files.fileslist.FileListCabFragment
 import kotlinx.android.synthetic.main.fragment_files_list.*
 import kotlinx.android.synthetic.main.fragment_files_list.view.*
 
-open class BaseFileListFragment : Fragment(), BaseFileListView {
+open class SimpleFilesListFragment : Fragment(), BaseFileListView {
 
     protected lateinit var adapter: FilesListAdapter
     private lateinit var listener: OnFilesFragmentInteraction
@@ -42,9 +41,9 @@ open class BaseFileListFragment : Fragment(), BaseFileListView {
         const val ARG_PATH = "FilePath"
         const val TAG = "AbstractFilesListFrag"
 
-        fun newInstance(path: String): BaseFileListFragment {
+        fun newInstance(path: String): SimpleFilesListFragment {
             Log.d(TAG, "New Instacne")
-            val fragment = BaseFileListFragment()
+            val fragment = SimpleFilesListFragment()
             val bundle = Bundle()
             bundle.putString(ARG_PATH, path)
             fragment.arguments = bundle
@@ -138,16 +137,19 @@ open class BaseFileListFragment : Fragment(), BaseFileListView {
         error_layout.visibility = View.GONE
         updateButton?.actionView = progressView
         setParentButton(false, "")
+        empty_view.visibility = View.GONE
 
     }
 
-    override fun onLoadingFinished(items: ArrayList<File>) {
+    override fun onLoadingFinished() {
         Log.d(TAG, "onLoadingFinshed")
         adapter.notifyDataSetChanged()
         progress_bar.visibility = View.GONE
         recycler_view.visibility = View.VISIBLE
         error_layout.visibility = View.GONE
         updateButton?.actionView = null
+        empty_view.visibility = View.GONE
+
     }
 
     override fun onError(e: String) {
@@ -156,6 +158,16 @@ open class BaseFileListFragment : Fragment(), BaseFileListView {
         recycler_view.visibility = View.GONE
         error_layout.visibility = View.VISIBLE
         updateButton?.actionView = null
+        empty_view.visibility = View.GONE
+    }
+
+    override fun onEmptyResult() {
+        Log.d(TAG, "EmptyView")
+        progress_bar.visibility = View.GONE
+        recycler_view.visibility = View.GONE
+        error_layout.visibility = View.GONE
+        updateButton?.actionView = null
+        empty_view.visibility = View.VISIBLE
     }
 
     override fun onDestroy() {

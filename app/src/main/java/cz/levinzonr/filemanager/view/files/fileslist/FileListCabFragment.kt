@@ -10,10 +10,10 @@ import android.widget.Toast
 import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.presenter.FilesListCabPresenter
-import cz.levinzonr.filemanager.view.files.BaseFileListFragment
+import cz.levinzonr.filemanager.view.files.SimpleFilesListFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-class FileListCabFragment : BaseFileListFragment(), FileListCabView {
+class FileListCabFragment : SimpleFilesListFragment(), FileListCabView {
 
     private lateinit var actionMode: ActionMode
 
@@ -117,8 +117,8 @@ class FileListCabFragment : BaseFileListFragment(), FileListCabView {
         actionMode.title = context.getString(R.string.checked_files, itemsCount)
     }
 
-    override fun onLoadingFinished(items: ArrayList<File>) {
-        super.onLoadingFinished(items)
+    override fun onLoadingFinished() {
+        super.onLoadingFinished()
         (context as AppCompatActivity).supportActionBar?.title = path.substringAfterLast("/")
         (context as AppCompatActivity).supportActionBar?.subtitle = path.substringBeforeLast("/")
     }

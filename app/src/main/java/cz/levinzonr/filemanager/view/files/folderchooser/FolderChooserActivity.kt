@@ -10,12 +10,12 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.model.File
-import cz.levinzonr.filemanager.view.files.BaseFileListFragment
+import cz.levinzonr.filemanager.view.files.SimpleFilesListFragment
 
 import kotlinx.android.synthetic.main.activity_folder_chooser.*
 import kotlinx.android.synthetic.main.content_folder_chooser.*
 
-class FolderChooserActivity : AppCompatActivity(), BaseFileListFragment.OnFilesFragmentInteraction {
+class FolderChooserActivity : AppCompatActivity(), SimpleFilesListFragment.OnFilesFragmentInteraction {
 
     private lateinit var path: String
 
@@ -45,7 +45,7 @@ class FolderChooserActivity : AppCompatActivity(), BaseFileListFragment.OnFilesF
         if (savedInstanceState == null)
             supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.container, BaseFileListFragment.newInstance(path))
+                    .replace(R.id.container, SimpleFilesListFragment.newInstance(path))
                     .commit()
 
         else
@@ -72,7 +72,7 @@ class FolderChooserActivity : AppCompatActivity(), BaseFileListFragment.OnFilesF
         path = file.path
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.container, BaseFileListFragment.newInstance(path))
+                .replace(R.id.container, SimpleFilesListFragment.newInstance(path))
                 .addToBackStack(null)
                 .setTransition(FragmentTransaction.TRANSIT_ENTER_MASK)
                 .commit()

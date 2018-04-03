@@ -44,7 +44,10 @@ open class FilesPresenter : BasePresenter<BaseFileListView>{
 
                         view?.setParentButton(file?.listFiles() != null, file.name)
                         Log.d(FilesListCabPresenter.TAG, "onComplete")
-                        view?.onLoadingFinished(items)
+                        if (items.size == 0)
+                            view?.onEmptyResult()
+                        else
+                            view?.onLoadingFinished()
                     }
 
                     override fun onNext(t: ArrayList<File>) {

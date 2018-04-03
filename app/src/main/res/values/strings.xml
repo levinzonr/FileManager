@@ -16,4 +16,5 @@
     <string name="welcome_message">This app needs your permission  to access your files</string>
     <string name="action_continue">Continue</string>
     <string name="no_app_found">No app found to open this file</string>
+    <string name="empty_folder">This folder doesn\'t contain any files..</string>
 </resources>

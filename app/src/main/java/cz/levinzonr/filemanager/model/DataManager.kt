@@ -21,7 +21,7 @@ class DataManager {
 
     fun removeFile(file: File) : cz.levinzonr.filemanager.model.File {
         Log.d(TAG, "Deleting ${file.name} thread: ${Thread.currentThread().name}")
-        Thread.sleep(1000)
+        file.deleteRecursively()
         return cz.levinzonr.filemanager.model.File.fromFile(file)
     }
 

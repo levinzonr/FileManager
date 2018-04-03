@@ -43,7 +43,7 @@ class FilesListCabPresenter : FilesPresenter() {
                    }
                    override fun onNext(t: File) {
                         Log.d(TAG, "done prosceeing $t")
-                        items.remove(t)
+                       items.remove(t)
                        (view as FileListCabView).onFileDeleted(cnt++, checked.size)
                    }
 

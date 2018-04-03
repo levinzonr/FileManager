@@ -75,7 +75,7 @@ class FileListCabFragment : SimpleFilesListFragment(), FileListCabView {
 
     override fun onFileDeleted(num: Int, max: Int) {
         adapter.notifyDataSetChanged()
-        Toast.makeText(context, "${num + 1}/$max files deleted", Toast.LENGTH_SHORT).show()
+        Log.d(TAG, "${num + 1} of $max files deleted")
     }
 
     override fun startActionMode() {

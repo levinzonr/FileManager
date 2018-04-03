@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.content.ContextCompat
+import android.support.v4.provider.DocumentFile
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
@@ -21,6 +22,16 @@ import cz.levinzonr.filemanager.view.preferences.PreferencesActivity
 import cz.levinzonr.filemanager.view.welcome.WelcomeActivity
 
 import kotlinx.android.synthetic.main.activity_main.*
+import android.widget.Toast
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.os.Build
+import android.support.v4.content.ContextCompat.startActivity
+import android.support.v4.content.FileProvider
+import cz.levinzonr.filemanager.BuildConfig
+import java.nio.file.Files.isDirectory
+
+
 
 class MainActivity : AppCompatActivity(), BaseFileListFragment.OnFilesFragmentInteraction {
 
@@ -69,13 +80,21 @@ class MainActivity : AppCompatActivity(), BaseFileListFragment.OnFilesFragmentIn
     }
 
     override fun onFileSelected(file: File) {
-        val intent = Intent()
-        intent.type = file.type
-        intent.action = Intent.ACTION_VIEW
-        intent.data = Uri.fromFile(java.io.File(file.path))
-        intent.type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.type)
-        Log.d(TAG, "intentType: ${intent.type}")
-        startActivity(Intent.createChooser(intent, "Open with"))
+            val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                FileProvider.getUriForFile(this, "${BuildConfig.APPLICATION_ID}.provider", java.io.File(file.path))
+            } else {
+                Uri.fromFile(java.io.File(file.path))
+            }
+            Intent().apply {
+                action = Intent.ACTION_VIEW
+                setDataAndType(uri, MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.type))
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                if (resolveActivity(packageManager) != null) {
+                    startActivity(this)
+                } else {
+                    Toast.makeText(this@MainActivity, R.string.no_app_found, Toast.LENGTH_SHORT).show()
+                }
+            }
     }
 
 
@@ -86,5 +105,7 @@ class MainActivity : AppCompatActivity(), BaseFileListFragment.OnFilesFragmentIn
 
     override fun onUpButtonClikced(path: String) {
     }
+
+
 
 }

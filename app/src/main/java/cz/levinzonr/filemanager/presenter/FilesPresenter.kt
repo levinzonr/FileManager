@@ -1,6 +1,8 @@
 package cz.levinzonr.filemanager.presenter
 
 import android.util.Log
+import android.webkit.MimeTypeMap
+import cz.levinzonr.filemanager.helpers.TypeHelper
 import cz.levinzonr.filemanager.model.DataManager
 import cz.levinzonr.filemanager.model.File
 import cz.levinzonr.filemanager.view.files.RecyclerItemView
@@ -62,9 +64,11 @@ open class FilesPresenter : BasePresenter<BaseFileListView>{
 
     open fun bindItemAtPosition(pos: Int, view: RecyclerItemView) {
         val file = items[pos]
+        val type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.type)
+        val extension = TypeHelper.typeFrom(type)
         when {
             file.isDirectory -> view.setFolderView(file.name)
-            else -> view.setFileView(file.name)
+            else -> view.setFileView(file.name, extension)
         }
     }
 

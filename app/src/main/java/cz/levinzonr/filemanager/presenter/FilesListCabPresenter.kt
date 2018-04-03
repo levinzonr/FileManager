@@ -99,8 +99,7 @@ class FilesListCabPresenter : FilesPresenter() {
         val file = items[pos]
         when {
             checked.contains(pos) -> view.setCheckedView(file.name)
-            file.isDirectory -> view.setFolderView(file.name)
-            else -> view.setFileView(file.name)
+            else -> super.bindItemAtPosition(pos, view)
         }
     }
 

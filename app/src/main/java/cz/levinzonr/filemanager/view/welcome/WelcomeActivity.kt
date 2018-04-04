@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.Manifest
 import android.content.Intent
+import android.os.PersistableBundle
+import android.support.design.widget.Snackbar
 import android.util.Log
+import android.widget.Toast
 import cz.levinzonr.filemanager.R
 import cz.levinzonr.filemanager.view.MainActivity
 import kotlinx.android.synthetic.main.activity_welcome.*
@@ -21,12 +24,13 @@ class WelcomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
+        requestPermission()
+    }
 
-        button_access.setOnClickListener({
-            ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE), RC_PERMISTION_ACCESS)
-        })
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE), RC_PERMISTION_ACCESS)
     }
 
 
@@ -38,7 +42,10 @@ class WelcomeActivity : AppCompatActivity() {
                 finish()
                 Log.d(TAG, "Granter")
             } else {
-                Log.d(TAG, "Denied")
+                Snackbar.make(welcome_view, R.string.welcome_message, Snackbar.LENGTH_INDEFINITE)
+                        .setAction(R.string.action_continue, {
+                            requestPermission()
+                        }).show()
             }
         }
         Log.d(TAG, grantResults.toString())

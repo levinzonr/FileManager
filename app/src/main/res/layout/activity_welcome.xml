@@ -9,6 +9,7 @@
     tools:context=".view.welcome.WelcomeActivity">
 
     <LinearLayout
+        android:id="@+id/welcome_view"
         android:gravity="center"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -29,20 +30,6 @@
 
     </LinearLayout>
 
-
-    <TextView
-        android:layout_margin="@dimen/fab_margin"
-        android:gravity="center"
-        android:textSize="20sp"
-        android:text="@string/welcome_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:text="@string/action_continue"
-        android:id="@+id/button_access"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
 
 </LinearLayout>
